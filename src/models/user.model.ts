@@ -28,7 +28,8 @@ User.init({
         type: DataTypes.STRING
     },
     lastName: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: true
     },
     email: {
         type: DataTypes.STRING,
@@ -37,6 +38,7 @@ User.init({
     },
     dni: {
         type: DataTypes.STRING,
+        allowNull: true
     },
     password: {
         type: DataTypes.STRING,

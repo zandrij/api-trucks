@@ -6,6 +6,7 @@ const cofigEnv = {
     username: <string>process.env.USER,
     password: <string>process.env.PASSWORD,
     host: <string>process.env.HOST,
+    port: 25060,
     dialect: process.env.DIALECT as Dialect
 }
 

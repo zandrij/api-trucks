@@ -11,14 +11,17 @@ interface AuthLogin {
     password: string;
 }
 
-async function login({user,password}: AuthLogin) {
-    const result = await User.findOne({where: {[Op.or]: {email: {[Op.eq]: user}, dni: {[Op.eq]: user}}}});
-    if(!result) return AuthError.USER_OR_PASSWORD_INVALID;
+async function login({ user, password }: AuthLogin) {
+    const result = await User.findOne({ where: { [Op.or]: { email: { [Op.eq]: user }, dni: { [Op.eq]: user } } } });
+    if (!result) return AuthError.USER_OR_PASSWORD_INVALID;
     const isCorrect = await verified(password, result.password);
-    if(!isCorrect) return AuthError.USER_OR_PASSWORD_INVALID;
-    const token = generateToken({id: result.id, type: result.type})
+    if (!isCorrect) return AuthError.USER_OR_PASSWORD_INVALID;
+    const token = generateToken({ id: result.id, type: result.type });
+    const info = { ...result.get({ plain: true }) };
+    delete (info as any).password;
+
     return {
-        data: result,
+        data: info,
         token
     };
 }
