@@ -45,6 +45,6 @@ lng: {
     // paranoid: true
 });
 
-// Zones.belongsTo(Path)
+Zones.belongsTo(Path, { as: 'rutas'})
 
 export default Zones;
