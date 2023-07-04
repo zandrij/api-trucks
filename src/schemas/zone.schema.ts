@@ -39,6 +39,24 @@ const deleteOneZoneSchema = z.object({
     })
 });
 
+
+/** obtener una zona */
+const getOneZoneSchema = z.object({
+    params: z.object({
+        id: z.string().nonempty().transform((val, ctx) => {
+            const result = parseInt(val);
+            if (isNaN(result)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "id no es un numero"
+                });
+                return z.NEVER;
+            }
+            return result;
+        }),
+    })
+});
+
 const updateOneZoneSchema = z.object({
     body: z.object({
         idpath: z.number().optional(),
@@ -97,5 +115,6 @@ export {
     createZoneOnlySchema,
     deleteOneZoneSchema,
     updateOneZoneSchema,
-    getZonesSchema
+    getZonesSchema,
+    getOneZoneSchema
 }

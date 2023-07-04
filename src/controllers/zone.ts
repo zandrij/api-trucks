@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle";
-import { DeleteOneZone, createOnlyZone, createZone, getZones, updateOneZone } from "../services/zones.service";
+import { DeleteOneZone, createOnlyZone, createZone, getZone, getZones, updateOneZone } from "../services/zones.service";
 import { RequestUser } from "../interfaces/users";
 
 /** get all paths */
@@ -74,11 +74,25 @@ async function updateOneZoneCtrl({params, user, body}:RequestUser, res: Response
 }
 
 
+/** obtener una zona */
+async function getOneZoneCtrl({params}:RequestUser, res: Response) {
+    try {
+        const response = await getZone(params.id as unknown as number);
+        res.status(200).json({
+            data: response,
+            ok: true,
+            message: "actualizado exitosamente"
+        });
+    } catch (error) {
+        handleHttp(res, "INTERNAL_SERVER_ERROR", error);
+    }
+}
 
 export {
     createZoneCtrl,
     createOnlyZoneCtrl,
     deleteOneZoneCtrl,
     updateOneZoneCtrl,
-    getZonesCtrl
+    getZonesCtrl,
+    getOneZoneCtrl
 }

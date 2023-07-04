@@ -19,6 +19,11 @@ async function getZones({limit, page, path}: any) {
     // return {limit, offset, page}
 }
 
+async function getZone(id:number) {
+    const zone = await Zones.findOne({where: {id}});
+    return zone;
+}
+
 async function createZone(data:any, type: string) {
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
     const pat = await Path.create({name: data.name});
@@ -52,5 +57,6 @@ export {
     createOnlyZone,
     DeleteOneZone,
     updateOneZone,
-    getZones
+    getZones,
+    getZone
 }
