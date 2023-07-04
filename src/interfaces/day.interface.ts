@@ -9,12 +9,13 @@ export interface DayRoute {
 export interface DayAttributes {
     id: number;
     iddrive: number;
+    idtruck: number;
     idpath: number;
     routes: string;
     lts: number;
     dateStart: Date;
     dateEnd: Date;
-    status: 'charging' | 'dispatching' | 'end';
+    status: 'wait' | 'charging' | 'dispatching' | 'end';
     createAt?: Date;
     updateAt?: Date;
 

@@ -1,6 +1,7 @@
 import { GlobalError } from "../constants/global_errors";
 import Path from "../models/Path.model";
 import Day from "../models/day.model";
+import Truck from "../models/truck.model";
 import User from "../models/user.model";
 import Zones from "../models/zones.model";
 
@@ -12,7 +13,7 @@ interface RouteDay {
     status: boolean;
 }
 
-async function getDays({limit, page, path}: any, type: string) {
+async function getDays({limit, page}: any, type: string) {
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
     const offset = page === 1 ? 0 : Math.floor((limit * page) - limit);
     const {count, rows} = await Day.findAndCountAll({
@@ -35,19 +36,23 @@ async function getDays({limit, page, path}: any, type: string) {
 }
 
 async function createDay(data:any, type: string) {
-    if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
+    // if(type !== 'customer') return GlobalError.NOT_PERMITED_ACCESS;
     const zones = await Zones.findAll({where: {idpath: data.idpath}, attributes: ['name', 'lat', 'lng', 'id']});
     if(!zones) return GlobalError.NOT_FOUND_DATA
+    const drive = await User.findByPk(data.iddrive);
+    if(!drive) return GlobalError.NOT_FOUND_DATA
+    const truck = await Truck.findByPk(data.idtruck);
+    if(!truck) return GlobalError.NOT_FOUND_DATA
     const day = await Day.create({
         ...data, 
         routes: JSON.stringify(zones.map(e => ({name: e.name, id: e.id, lat: e.lat, lng: e.lng, status: false}))),
-        status: 'charging',
+        status: 'wait',
     })
 
     return {...day.toJSON(), routes: day.routes};
 }
 
-async function updateDayStatus(id:number, status: "charging" | "dispatching" | "end", type: string) {
+async function updateDayStatus(id:number, status: "wait" | "charging" | "dispatching" | "end", type: string) {
     const day = await Day.findByPk(id);
     if(!day) return GlobalError.NOT_FOUND_DATA;
     day.update({status});

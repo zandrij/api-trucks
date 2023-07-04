@@ -3,6 +3,7 @@ import { z } from "zod";
 const createDaySchema = z.object({
     body: z.object({
         iddrive: z.number().min(1),
+        idtruck: z.number().min(1),
         idpath: z.number().min(1),
         lts: z.number().min(1),
         dateStart: z.string(),
@@ -12,7 +13,7 @@ const createDaySchema = z.object({
 
 const updateDayStatuschema = z.object({
     body: z.object({
-        status: z.enum(['charging', 'dispatching', 'end']),
+        status: z.enum(['wait', 'charging', 'dispatching', 'end']),
     }),
     params: z.object({
         id: z.string().nonempty().transform((val, ctx) => {

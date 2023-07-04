@@ -3,22 +3,25 @@ import {DataTypes, Model} from 'sequelize'
 import { DayAttributes, DayInput, DayRoute } from "../interfaces/day.interface";
 import Path from "./Path.model";
 import User from "./user.model";
+import Truck from "./truck.model";
 
 
 class Day extends Model<DayAttributes, DayInput> implements DayAttributes {
     id!: number;
     iddrive!: number;
+    idtruck!: number;
     idpath!: number;
     lts!: number;
     routes!: string;
     dateStart!: Date;
     dateEnd!: Date;
-    status!: "charging" | "dispatching" | "end";
+    status!: "wait" | "charging" | "dispatching" | "end";
 
     public readonly createdAt!: Date;
     public readonly updateAt!: Date;
     public path?: Path;
     public user?: User;
+    public truck?: Truck;
 
 }
 
@@ -29,6 +32,9 @@ Day.init({
         autoIncrement: true
     },
     iddrive: {
+        type: DataTypes.INTEGER
+    },
+    idtruck: {
         type: DataTypes.INTEGER
     },
     idpath: {
@@ -48,7 +54,7 @@ Day.init({
     },
     status: {
         type: DataTypes.ENUM,
-        values: ['charging', 'dispatching', 'end']
+        values: ['wait', 'charging', 'dispatching', 'end']
         
     },
 }, {
@@ -58,6 +64,7 @@ Day.init({
 });
 
 Day.belongsTo(Path, {foreignKey: 'idpath'})
+Day.belongsTo(Truck, {foreignKey: 'idtruck'})
 Day.belongsTo(User, {foreignKey: 'iddrive'})
 
 export default Day;

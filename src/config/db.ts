@@ -2,14 +2,13 @@ import { Dialect, Sequelize } from "sequelize";
 import winston from 'winston'
 
 const cofigEnv = {
-    database: <string>process.env.DATABASE,
-    username: <string>process.env.USER,
-    password: <string>process.env.PASSWORD,
-    host: <string>process.env.HOST,
+    database: 'defaultdb',
+    username: 'doadmin',
+    password: 'AVNS_Ofznn7FtY4GZ5_fTQKC',
+    host: 'db-mysql-nyc1-73624-do-user-14330666-0.b.db.ondigitalocean.com',
     port: 25060,
     dialect: process.env.DIALECT as Dialect
 }
-
 const isDev = process.env.NODE_ENV === 'dev'
 
 export const sequelize = new Sequelize({
