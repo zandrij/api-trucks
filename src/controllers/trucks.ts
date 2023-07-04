@@ -9,7 +9,7 @@ async function createTruckCtrl({body, user}:RequestUser, res: Response) {
         res.status(200).json({
             data: response,
             ok: true,
-            message: typeof response ==='string' ? "Error al agregar" : "agregado exitosamente"
+            message: typeof response === 'string' ? "Error al agregar" : "agregado exitosamente"
         });
     } catch (error) {
         handleHttp(res, "INTERNAL_SERVER_ERROR", error);

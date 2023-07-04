@@ -11,6 +11,25 @@ const createDaySchema = z.object({
     })
 });
 
+const updateFinallyDaySchema = z.object({
+    body: z.object({
+        dateEnd: z.string().nonempty(),
+    }),
+    params: z.object({
+        id: z.string().nonempty().transform((val, ctx) => {
+            const result = parseInt(val);
+            if (isNaN(result)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "id no es un numero"
+                });
+                return z.NEVER;
+            }
+            return result;
+        }),
+    })
+});
+
 const updateDayStatuschema = z.object({
     body: z.object({
         status: z.enum(['wait', 'charging', 'dispatching', 'end']),
@@ -85,5 +104,6 @@ export {
     createDaySchema,
     updateDayStatuschema,
     updateDayRouteschema,
-    getDaysSchema
+    getDaysSchema,
+    updateFinallyDaySchema
 }

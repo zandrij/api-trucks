@@ -74,6 +74,14 @@ async function updateDayRoute(id:number, data: any, type: string) {
     return day.toJSON();
 }
 
+async function finallyDay(type: string, dateEnd: any,  id: number) {
+    if(type === 'customer') return GlobalError.NOT_PERMITED_ACCESS;
+    const day = await Day.findByPk(id);
+    if(!day) return GlobalError.NOT_FOUND_DATA;
+    day.update({status: 'end', dateEnd});
+    return day.toJSON();
+}
+
 async function getDayOfDriver({type, id}: any) {
     if(type === 'customer') return GlobalError.NOT_PERMITED_ACCESS;
     const day = await Day.findOne({where: {iddrive: id}, order: [['id', "DESC"]],         include: [
@@ -93,6 +101,7 @@ async function getDayOfDriver({type, id}: any) {
 
 export {
     createDay,
+    finallyDay,
     getDayOfDriver,
     updateDayStatus,
     updateDayRoute,
