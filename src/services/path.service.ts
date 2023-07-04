@@ -18,6 +18,20 @@ async function getPaths({limit, page, zones}: any) {
     // return {limit, offset, page}
 }
 
+
+
+async function getPathOne(id:number) {
+    return await Path.findOne({
+        order: [['id', 'DESC']],
+        where: {id},
+        include: [
+            {
+                model: Zones
+            }
+        ] 
+    });
+}
+
 async function createOnlyPath(data:any, type: string) {
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
     const ph = await Path.create(data);
@@ -26,5 +40,6 @@ async function createOnlyPath(data:any, type: string) {
 
 export {
     getPaths,
-    createOnlyPath
+    createOnlyPath,
+    getPathOne
 }

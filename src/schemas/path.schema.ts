@@ -38,7 +38,26 @@ const getPathsSchema = z.object({
     }),
 });
 
+
+/** obtener una paths */
+const getOnePathsSchema = z.object({
+    params: z.object({
+        id: z.string().nonempty().transform((val, ctx) => {
+            const result = parseInt(val);
+            if (isNaN(result)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "id no es un numero"
+                });
+                return z.NEVER;
+            }
+            return result;
+        }),
+    })
+});
+
 export {
     createOnlyPathSchema,
-    getPathsSchema
+    getPathsSchema,
+    getOnePathsSchema
 }

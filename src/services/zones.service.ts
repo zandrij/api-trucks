@@ -20,7 +20,7 @@ async function getZones({limit, page, path}: any) {
 }
 
 async function getZone(id:number) {
-    const zone = await Zones.findOne({where: {id}, include: ['rutas']});
+    const zone = await Zones.findOne({where: {id}});
     return zone;
 }
 
