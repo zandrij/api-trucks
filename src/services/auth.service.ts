@@ -41,7 +41,9 @@ async function registerDrive(data: UserInput, type: string) {
 
 // registrar admin
 async function registerOwner(data: UserInput) {
-    const checkEmail = await User.findOne({where: {email: data.email}})
+    console.log({data})
+    const checkEmail = await User.findOne({where: {email: data.email}});
+    console.log({checkEmail})
     if(checkEmail) return AuthError.USER_OR_PASSWORD_INVALID;
     const pass = await encrypt(data.password);
     const newUser = await User.create({...data, password: pass, type: 'owner'});
@@ -50,7 +52,7 @@ async function registerOwner(data: UserInput) {
         data: newUser,
         token
     };
-    
+
 }
 
 export {
