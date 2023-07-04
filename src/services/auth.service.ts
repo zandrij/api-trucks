@@ -50,6 +50,7 @@ async function registerOwner(data: UserInput) {
         data: newUser,
         token
     };
+    
 }
 
 export {
