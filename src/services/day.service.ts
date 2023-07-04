@@ -28,6 +28,10 @@ async function getDays({limit, page}: any, type: string) {
             {
                 model: User,
                 attributes: ['name', 'lastName', 'email', 'dni']
+            },
+            {
+                model: Truck,
+                attributes: ['color', 'model', 'serial', 'lts', 'status']
             }
         ]
     });
@@ -46,7 +50,7 @@ async function createDay(data:any, type: string) {
     const day = await Day.create({
         ...data, 
         routes: JSON.stringify(zones.map(e => ({name: e.name, id: e.id, lat: e.lat, lng: e.lng, status: false}))),
-        status: 'wait',
+        status: 'charging',
     })
 
     return {...day.toJSON(), routes: day.routes};
@@ -72,7 +76,16 @@ async function updateDayRoute(id:number, data: any, type: string) {
 
 async function getDayOfDriver({type, id}: any) {
     if(type === 'customer') return GlobalError.NOT_PERMITED_ACCESS;
-    const day = await Day.findOne({where: {iddrive: id}, order: [['id', "DESC"]]});
+    const day = await Day.findOne({where: {iddrive: id}, order: [['id', "DESC"]],         include: [
+        {
+            model: Path,
+            attributes: ['name', 'id']
+        },
+        {
+            model: Truck,
+            attributes: ['color', 'model', 'serial', 'lts', 'status']
+        }
+    ]});
     if(!day) return GlobalError.NOT_FOUND_DATA;
     return day.toJSON();
 }
