@@ -28,28 +28,31 @@ async function login({ user, password }: AuthLogin) {
 
 // registrar drive
 async function registerDrive(data: UserInput, type: string) {
+    console.log({data})
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
     const checkEmail = await User.findOne({where: {[Op.or]: {email: {[Op.eq]: data.email}, dni: {[Op.eq]: data.dni}}}})
+    console.log({checkEmail})
     if(checkEmail) return AuthError.USER_OR_PASSWORD_INVALID;
     const pass = await encrypt(data.password);
     const newUser = await User.create({...data, password: pass, type: 'drive'});
-    // const token = generateToken({id: newUser.id, type: 'drive'})
+    let user = {...newUser.get({plain: true})};
+    delete (user as any).password;
     return {
-        data: newUser,
+        data: user,
     };
 }
 
 // registrar admin
 async function registerOwner(data: UserInput) {
-    console.log({data})
     const checkEmail = await User.findOne({where: {email: data.email}});
-    console.log({checkEmail})
     if(checkEmail) return AuthError.USER_OR_PASSWORD_INVALID;
     const pass = await encrypt(data.password);
     const newUser = await User.create({...data, password: pass, type: 'owner'});
     const token = generateToken({id: newUser.id, type: 'owner'})
+    let user = {...newUser.get({plain: true})};
+    delete (user as any).password;
     return {
-        data: newUser,
+        data: user,
         token
     };
 
