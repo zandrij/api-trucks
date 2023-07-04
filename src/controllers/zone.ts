@@ -81,7 +81,6 @@ async function getOneZoneCtrl({params}:RequestUser, res: Response) {
         res.status(200).json({
             data: response,
             ok: true,
-            message: "actualizado exitosamente"
         });
     } catch (error) {
         handleHttp(res, "INTERNAL_SERVER_ERROR", error);
