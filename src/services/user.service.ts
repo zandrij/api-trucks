@@ -27,6 +27,11 @@ async function updateUser(id:number, data: any, type: string) {
     return user.toJSON();
 }
 
+async function getUserId(id:number) {
+    const user = await User.findOne({where: {id}, attributes: {exclude: ['password']}});
+    return user;
+}
+
 // actualizar un usuario
 async function logicDeleteUser(id:number, type: string) {
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
@@ -40,5 +45,6 @@ async function logicDeleteUser(id:number, type: string) {
 export {
     getUsers,
     updateUser,
-    logicDeleteUser
+    logicDeleteUser,
+    getUserId
 }

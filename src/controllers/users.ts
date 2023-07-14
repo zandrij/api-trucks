@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { RequestUser } from "../interfaces/users";
-import { getUsers, logicDeleteUser, updateUser } from "../services/user.service";
+import { getUserId, getUsers, logicDeleteUser, updateUser } from "../services/user.service";
 import { handleHttp } from "../utils/error.handle";
 
 /** get user actives [all, customer, drive and owner] */
@@ -44,8 +44,22 @@ async function deleteLoginUserCtrl({params, user}:RequestUser, res: Response) {
 }
 
 
+/** obtener una zona */
+async function getUserIdCrtl({params}:RequestUser, res: Response) {
+    try {
+        const response = await getUserId(params.id as unknown as number);
+        res.status(200).json({
+            data: response,
+            ok: true,
+        });
+    } catch (error) {
+        handleHttp(res, "INTERNAL_SERVER_ERROR", error);
+    }
+}
+
 export {
     getUsersCtrl,
     updateUserCtrl,
-    deleteLoginUserCtrl
+    deleteLoginUserCtrl,
+    getUserIdCrtl
 }

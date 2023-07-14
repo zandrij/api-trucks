@@ -69,8 +69,26 @@ const deleteUserSchema = z.object({
 });
 
 
+/** obtener usuario id */
+const getUserSchema = z.object({
+    params: z.object({
+        id: z.string().nonempty().transform((val, ctx) => {
+            const result = parseInt(val);
+            if (isNaN(result)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "id no es un numero"
+                });
+                return z.NEVER;
+            }
+            return result;
+        }),
+    })
+});
+
 export {
     updateUserSchema,
     getUsersSchema,
-    deleteUserSchema
+    deleteUserSchema,
+    getUserSchema
 }
