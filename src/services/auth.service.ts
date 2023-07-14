@@ -51,7 +51,7 @@ async function registerCustomer(data: UserInput, type: string) {
     const newUser = await User.create({...data, password: pass, type: 'customer', status: "active"});
     // const token = generateToken({id: newUser.id, type: 'drive'})
     return {
-        data: user,
+        data: newUser,
     };
 }
 
