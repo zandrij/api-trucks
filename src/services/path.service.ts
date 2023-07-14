@@ -8,11 +8,11 @@ async function getPaths({limit, page, zones}: any) {
         limit,
         offset,
         order: [['id', 'DESC']],
-        include: zones ? [
-            {
-                model: Zones
-            }
-        ] : undefined
+        // include: zones ? [
+        //     {
+        //         model: Zones
+        //     }
+        // ] : undefined
     });
     return {total: count, rows, limit, page};
     // return {limit, offset, page}

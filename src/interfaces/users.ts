@@ -10,12 +10,13 @@ export interface UserAttributes {
     email: string;
     dni: string;
     type: 'owner' | 'customer' | 'drive';
+    status: 'active' | 'deleted',
     createAt?: Date;
     updateAt?: Date;
 
 }
 
-export interface UserInput extends Optional<UserAttributes, 'id' | 'lastName' | 'dni'> {}
+export interface UserInput extends Optional<UserAttributes, 'id' | 'lastName' | 'dni' | 'status'> {}
 export interface UserOuput extends Required<UserAttributes> {}
 
 export interface RequestUser extends Request {

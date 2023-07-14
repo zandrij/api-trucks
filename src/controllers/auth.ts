@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle";
-import { login, registerDrive, registerOwner } from "../services/auth.service";
+import { login, registerCustomer, registerDrive, registerOwner } from "../services/auth.service";
 import { RequestUser } from "../interfaces/users";
 
 async function loginCtrl(req: Request, res: Response) {
@@ -21,6 +21,15 @@ async function registerOwnerCrtl(req: Request, res: Response) {
     }
 }
 
+async function registerCustomerCrtl({body, user}: RequestUser, res: Response) {
+    try {
+        const response = await registerCustomer(body, `${user?.type}`);
+        res.status(200).json(response);
+    } catch (error) {
+        handleHttp(res, "INTERNAL_SERVER_ERROR", error);
+    }
+}
+
 // register drive crontroller
 async function registerDriveCrtl({body, user}: RequestUser, res: Response) {
     try {
@@ -34,4 +43,6 @@ async function registerDriveCrtl({body, user}: RequestUser, res: Response) {
 export {
     registerOwnerCrtl,
     registerDriveCrtl,
-    loginCtrl}
+    loginCtrl,
+    registerCustomerCrtl
+}

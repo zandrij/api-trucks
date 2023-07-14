@@ -11,6 +11,7 @@ class User extends Model<UserAttributes, UserInput> implements UserAttributes {
     email!: string;
     dni!: string;
     type!: "owner" | "customer" | "drive";
+    status!: "active" | "deleted";
     
 
     public readonly createdAt!: Date;
@@ -47,6 +48,10 @@ User.init({
     type: {
         type: DataTypes.ENUM,
         values: ['owner', 'customer', 'drive']
+    },
+    status: {
+        type: DataTypes.ENUM,
+        values: ['active', 'deleted']
     }
 }, {
     timestamps: true,

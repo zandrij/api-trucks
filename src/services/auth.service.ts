@@ -34,9 +34,22 @@ async function registerDrive(data: UserInput, type: string) {
     console.log({checkEmail})
     if(checkEmail) return AuthError.USER_OR_PASSWORD_INVALID;
     const pass = await encrypt(data.password);
-    const newUser = await User.create({...data, password: pass, type: 'drive'});
-    let user = {...newUser.get({plain: true})};
-    delete (user as any).password;
+
+    const newUser = await User.create({...data, password: pass, type: 'drive', status: 'active'});
+    // const token = generateToken({id: newUser.id, type: 'drive'})
+    return {
+        data: newUser,
+    };
+}
+
+// registrar customer
+async function registerCustomer(data: UserInput, type: string) {
+    if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
+    const checkEmail = await User.findOne({where: {[Op.or]: {email: {[Op.eq]: data.email}, dni: {[Op.eq]: data.dni}}}})
+    if(checkEmail) return AuthError.USER_OR_PASSWORD_INVALID;
+    const pass = await encrypt(data.password);
+    const newUser = await User.create({...data, password: pass, type: 'customer', status: "active"});
+    // const token = generateToken({id: newUser.id, type: 'drive'})
     return {
         data: user,
     };
@@ -47,7 +60,7 @@ async function registerOwner(data: UserInput) {
     const checkEmail = await User.findOne({where: {email: data.email}});
     if(checkEmail) return AuthError.USER_OR_PASSWORD_INVALID;
     const pass = await encrypt(data.password);
-    const newUser = await User.create({...data, password: pass, type: 'owner'});
+    const newUser = await User.create({...data, password: pass, type: 'owner', status: 'active'});
     const token = generateToken({id: newUser.id, type: 'owner'})
     let user = {...newUser.get({plain: true})};
     delete (user as any).password;
@@ -61,5 +74,6 @@ async function registerOwner(data: UserInput) {
 export {
     registerOwner,
     registerDrive,
-    login
+    login,
+    registerCustomer
 }
