@@ -56,7 +56,6 @@ User.init({
 }, {
     timestamps: true,
     sequelize: sequelize,
-    tableName: 'users'
 });
 
 export default User;

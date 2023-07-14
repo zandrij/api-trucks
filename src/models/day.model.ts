@@ -55,7 +55,6 @@ Day.init({
     status: {
         type: DataTypes.ENUM,
         values: ['wait', 'charging', 'dispatching', 'end']
-        
     },
 }, {
     timestamps: true,

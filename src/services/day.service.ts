@@ -42,14 +42,19 @@ async function getDays({limit, page}: any, type: string) {
 async function createDay(data:any, type: string) {
     // if(type !== 'customer') return GlobalError.NOT_PERMITED_ACCESS;
     const zones = await Zones.findAll({where: {idpath: data.idpath}, attributes: ['name', 'lat', 'lng', 'id']});
+
+    console.log({data})
     if(!zones) return GlobalError.NOT_FOUND_DATA
     const drive = await User.findByPk(data.iddrive);
+    console.log({drive})
     if(!drive) return GlobalError.NOT_FOUND_DATA
     const truck = await Truck.findByPk(data.idtruck);
     if(!truck) return GlobalError.NOT_FOUND_DATA
+    console.log({...data})
+
     const day = await Day.create({
         ...data, 
-        routes: JSON.stringify(zones.map(e => ({name: e.name, id: e.id, lat: e.lat, lng: e.lng, status: false}))),
+        routes: JSON.stringify([]),
         status: 'charging',
     })
 
