@@ -1,8 +1,9 @@
 import { GlobalError } from "../constants/global_errors";
-import Path from "../models/Path.model";
+import Path from "../models/Path";
 import Day from "../models/day.model";
+import Payment from "../models/payment.model";
 import Truck from "../models/truck.model";
-import User from "../models/user.model";
+import User from "../models/user";
 import Zones from "../models/zones.model";
 
 interface RouteDay {
@@ -41,23 +42,24 @@ async function getDays({limit, page}: any, type: string) {
 
 async function createDay(data:any, type: string) {
     // if(type !== 'customer') return GlobalError.NOT_PERMITED_ACCESS;
-    const zones = await Zones.findAll({where: {idpath: data.idpath}, attributes: ['name', 'lat', 'lng', 'id']});
-
-    console.log({data})
-    if(!zones) return GlobalError.NOT_FOUND_DATA
+    // const zones = await Zones.findAll({where: {idpath: data.idpath}, attributes: ['name', 'lat', 'lng', 'id']});
+    // if(!zones) return GlobalError.NOT_FOUND_DATA
+    const path = await Path.findByPk(data.idpath);
+    const  clients = await path?.getUsers();
+    if (!clients) return GlobalError.DATA_ALREADY_EXIST
     const drive = await User.findByPk(data.iddrive);
-    console.log({drive})
     if(!drive) return GlobalError.NOT_FOUND_DATA
     const truck = await Truck.findByPk(data.idtruck);
     if(!truck) return GlobalError.NOT_FOUND_DATA
-    console.log({...data})
-
     const day = await Day.create({
         ...data, 
-        routes: JSON.stringify([]),
+        // routes: JSON.stringify(zones.map(e => ({name: e.name, id: e.id, lat: e.lat, lng: e.lng, status: false}))),
         status: 'charging',
     })
-
+    for await (let c of clients!) {
+        await Payment.create({idday: day.id, iduser: c.id, status: 'wait'})
+    }
+    // const payment = await Payment.create({idday: day.id, iduser})
     return {...day.toJSON(), routes: day.routes};
 }
 

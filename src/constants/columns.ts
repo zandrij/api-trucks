@@ -1,0 +1,1 @@
+export const columnsUser: string[] = ['id', 'name', 'lastName', 'email', 'dni', 'phone', 'device', 'address', 'type', 'status', 'createdAt', 'updatedAt']

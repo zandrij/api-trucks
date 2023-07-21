@@ -1,7 +1,7 @@
 import { sequelize } from "../config/db";
 import {DataTypes, Model} from 'sequelize'
 import { ZonesAttributes, ZonesInput } from "../interfaces/zones.interface";
-import Path from "./Path.model";
+import Path from "./Path";
 
 
 class Zones extends Model<ZonesAttributes, ZonesInput> implements ZonesAttributes {

@@ -9,6 +9,16 @@ const cofigEnv = {
     port: 25060,
     dialect: process.env.DIALECT as Dialect
 }
+
+// const cofigEnv = {
+//     database: 'trucks',
+//     username: 'root',
+//     password: 'secret',
+//     host: 'localhost',
+//     port: 3306,
+//     dialect: process.env.DIALECT as Dialect
+// }
+
 const isDev = process.env.NODE_ENV === 'dev'
 
 export const sequelize = new Sequelize({

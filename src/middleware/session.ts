@@ -11,14 +11,16 @@ const checkJwt = (req: RequestUser, res: Response, next: NextFunction) => {
         const isUser = verifyToken(`${jwt}`);
         // console.log(isUser?._doc)
         if(!isUser) {
+            // console.log({jwtByUser, jwt, isUser});
             res.status(401).json(GlobalError.SESSION_INVALID)
         } else {
             req.user = isUser as {id: string};
-            console.log({jwtByUser});
+            // console.log({jwtByUser});
             next();
         }
 
     } catch (e) {
+        // console.log(e)
         res.status(401).json(GlobalError.SESSION_INVALID)
     }
 }

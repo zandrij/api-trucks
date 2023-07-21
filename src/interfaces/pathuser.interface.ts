@@ -1,13 +1,13 @@
 import { Optional } from "sequelize";
 
-export interface DayAttributes {
+export interface PathUserAttributes {
     id: number;
-    idcustomer: number;
-    idpath: number;
+    userId: number;
+    pathId: number;
     createAt?: Date;
     updateAt?: Date;
 
 }
 
-export interface DayInput extends Optional<DayAttributes, 'id'> {}
-export interface DayOuput extends Required<DayAttributes> {}
+export interface PathUserInput extends Optional<PathUserAttributes, 'id'> {}
+export interface PathUserOuput extends Required<PathUserAttributes> {}

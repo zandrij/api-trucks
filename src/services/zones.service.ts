@@ -1,6 +1,6 @@
 import { GlobalError } from "../constants/global_errors";
 import { ZonesAttributes } from "../interfaces/zones.interface";
-import Path from "../models/Path.model";
+import Path from "../models/Path";
 import Zones from "../models/zones.model";
 
 async function getZones({limit, page, path}: any) {

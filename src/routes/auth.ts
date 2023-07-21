@@ -6,7 +6,7 @@ import { checkJwt } from "../middleware/session";
 
 const router = Router();
 
-router.post('/register', schemaValidator(registerOwnerSchema), registerOwnerCrtl);
+router.post('/register', checkJwt, schemaValidator(registerOwnerSchema), registerOwnerCrtl);
 router.post('/drive', checkJwt, schemaValidator(registerDriveSchema), registerDriveCrtl);
 router.post('/customer', checkJwt, schemaValidator(registerCustomerSchema), registerCustomerCrtl);
 router.post('/login', schemaValidator(loginSchema), loginCtrl);

@@ -2,10 +2,18 @@ import { Request, Response } from "express";
 import { RequestUser } from "../interfaces/users";
 import { handleHttp } from "../utils/error.handle";
 import { createDay, finallyDay, getDayOfDriver, getDays, updateDayRoute, updateDayStatus } from "../services/day.service";
+import { GlobalError } from "../constants/global_errors";
 
 async function createDayCtrl({body, user}:RequestUser, res: Response) {
     try {
         const response = await createDay(body, `${user?.type}`);
+        if(response ===  GlobalError.DATA_ALREADY_EXIST) {
+            return res.status(400).json({
+                error: response,
+                ok: false,
+                message: "Noy clientes en esta ruta"
+            });
+        }
         res.status(200).json({
             data: response,
             ok: true,

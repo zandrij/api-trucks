@@ -11,6 +11,7 @@ const app = express();
 app.use(cors());
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
+app.use('/public', express.static(`${process.cwd()}/public`))
 
 sequelize.sync({force: false})
 .then(() => console.log("connected to db"))

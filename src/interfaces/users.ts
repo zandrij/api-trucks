@@ -9,8 +9,11 @@ export interface UserAttributes {
     password: string;
     email: string;
     dni: string;
+    phone: string;
+    device: string;
+    address: string;
     type: 'owner' | 'customer' | 'drive';
-    status: 'active' | 'deleted',
+    status: 'active' | 'banned' | 'deleted',
     createAt?: Date;
     updateAt?: Date;
 

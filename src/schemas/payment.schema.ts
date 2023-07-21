@@ -1,22 +1,7 @@
 import { z } from "zod";
 
-/** crear un path */
-const createOnlyPathSchema = z.object({
-    body: z.object({
-        name: z.string().min(3).nonempty(),
-    })
-});
-
-/** agregar un usuario a un path */
-const addUserToPathSchema = z.object({
-    body: z.object({
-        pathId: z.number().min(1).nonnegative(),
-        userId: z.number().min(1).nonnegative(),
-    })
-});
-
-/** obtener paths */
-const getPathsSchema = z.object({
+/** obtener lista de pagos con usuarios pagos */
+const getPaymentSchema = z.object({
     query: z.object({
         limit: z.string().transform((val, ctx) => {
             const result = parseInt(val);
@@ -40,47 +25,52 @@ const getPathsSchema = z.object({
             }
             return result;
         }).default('1'),
-        customers: z.string().optional().transform((val) => {
-            return (val === 'true')
-        })
-        // zones: z.string().optional().transform((val) => {
+        day: z.string().optional().transform((val, ctx) => {
+            const result = parseInt(val!);
+            if (isNaN(result)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "id no es un numero"
+                });
+                return z.NEVER;
+            }
+            return result;
+        }).default('0'),
+        path: z.string().optional().transform((val, ctx) => {
+            const result = parseInt(val!);
+            if (isNaN(result)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "id no es un numero"
+                });
+                return z.NEVER;
+            }
+            return result;
+        }).default('0'),
+        user: z.string().optional().transform((val, ctx) => {
+            const result = parseInt(val!);
+            if (isNaN(result)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "id no es un numero"
+                });
+                return z.NEVER;
+            }
+            return result;
+        }).default('0'),
+        status: z.string().trim().optional(),
+        start: z.string().trim().optional(),
+        end: z.string().trim().optional(),
+        // path: z.string().optional().transform((val) => {
         //     return (val === 'true')
         // })
     }),
 });
 
-/** remover usuario de un path paths */
-const removeUserToPathSchema = z.object({
-    query: z.object({
-        pathId: z.string().nonempty().transform((val, ctx) => {
-            const result = parseInt(val);
-            if (isNaN(result)) {
-                ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    message: "id no es un numero"
-                });
-                return z.NEVER;
-            }
-            return result;
-        }),
-        userId: z.string().nonempty().transform((val, ctx) => {
-            const result = parseInt(val);
-            if (isNaN(result)) {
-                ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    message: "id no es un numero"
-                });
-                return z.NEVER;
-            }
-            return result;
-        })
-    }),
-});
-
-// update path schema validator
-const updatePathSchema = z.object({
+// actualizar el estado de un pago
+const updatePaymentStatuschema = z.object({
     body: z.object({
-        name: z.string().min(3).nonempty(),
+        status: z.enum(['wait', 'paid', 'reject', 'aproved', 'cancel']),
     }),
     params: z.object({
         id: z.string().nonempty().transform((val, ctx) => {
@@ -97,8 +87,12 @@ const updatePathSchema = z.object({
     })
 });
 
-/** obtener una paths */
-const getOnePathSchema = z.object({
+// subir ref e imagen
+const updatePaymentRefSchema = z.object({
+    body: z.object({
+        reference: z.string().trim().nonempty(),
+        type: z.enum(['cash', 'transfer', 'mobile']),
+    }),
     params: z.object({
         id: z.string().nonempty().transform((val, ctx) => {
             const result = parseInt(val);
@@ -113,12 +107,10 @@ const getOnePathSchema = z.object({
         }),
     })
 });
+
 
 export {
-    createOnlyPathSchema,
-    getPathsSchema,
-    addUserToPathSchema,
-    removeUserToPathSchema,
-    updatePathSchema,
-    getOnePathSchema
+    getPaymentSchema,
+    updatePaymentStatuschema,
+    updatePaymentRefSchema
 }

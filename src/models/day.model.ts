@@ -1,9 +1,10 @@
 import { sequelize } from "../config/db";
 import {DataTypes, Model} from 'sequelize'
 import { DayAttributes, DayInput, DayRoute } from "../interfaces/day.interface";
-import Path from "./Path.model";
-import User from "./user.model";
+import Path from "./Path";
+import User from "./user";
 import Truck from "./truck.model";
+import Payment from "./payment.model";
 
 
 class Day extends Model<DayAttributes, DayInput> implements DayAttributes {
@@ -55,6 +56,7 @@ Day.init({
     status: {
         type: DataTypes.ENUM,
         values: ['wait', 'charging', 'dispatching', 'end']
+        
     },
 }, {
     timestamps: true,
@@ -65,5 +67,6 @@ Day.init({
 Day.belongsTo(Path, {foreignKey: 'idpath'})
 Day.belongsTo(Truck, {foreignKey: 'idtruck'})
 Day.belongsTo(User, {foreignKey: 'iddrive'})
+// Payment.hasMany(Day, {foreignKey: 'idday'})
 
 export default Day;

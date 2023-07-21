@@ -1,6 +1,7 @@
 import { Op } from "sequelize";
 import { GlobalError } from "../constants/global_errors";
-import User from "../models/user.model";
+import User from "../models/user";
+import { columnsUser } from "../constants/columns";
 
 // obtener usuarios [todos o por tipo]
 async function getUsers({limit, page, typeUser}: any, type: string) {
@@ -19,17 +20,13 @@ async function getUsers({limit, page, typeUser}: any, type: string) {
 
 // actualizar un usuario
 async function updateUser(id:number, data: any, type: string) {
-    if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
-    const user = await User.findByPk(id);
+    // if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
+    const user = await User.findByPk(id, {attributes: columnsUser});
+    // if(user?.type === 'owner' &&) 
     if(!user) return GlobalError.NOT_FOUND_DATA;
     user.update(data)
     // day.update({status});
     return user.toJSON();
-}
-
-async function getUserId(id:number) {
-    const user = await User.findOne({where: {id}, attributes: {exclude: ['password']}});
-    return user;
 }
 
 // actualizar un usuario
@@ -45,6 +42,5 @@ async function logicDeleteUser(id:number, type: string) {
 export {
     getUsers,
     updateUser,
-    logicDeleteUser,
-    getUserId
+    logicDeleteUser
 }
