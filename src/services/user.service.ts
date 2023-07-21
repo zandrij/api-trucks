@@ -39,8 +39,14 @@ async function logicDeleteUser(id:number, type: string) {
     return user.toJSON();
 }
 
+async function getUserId(id:number) {
+    const user = await User.findOne({where: {id}, attributes: {exclude: ['password']}});
+    return user;
+}
+
 export {
     getUsers,
     updateUser,
-    logicDeleteUser
+    logicDeleteUser,
+    getUserId
 }
