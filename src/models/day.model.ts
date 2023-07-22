@@ -12,6 +12,7 @@ class Day extends Model<DayAttributes, DayInput> implements DayAttributes {
     iddrive!: number;
     idtruck!: number;
     idpath!: number;
+    iduser!: number;
     lts!: number;
     routes!: string;
     dateStart!: Date;
@@ -41,6 +42,9 @@ Day.init({
     idpath: {
         type: DataTypes.INTEGER
     },
+    iduser: {
+        type: DataTypes.INTEGER
+    },
     lts: {
         type: DataTypes.INTEGER
     },
@@ -67,6 +71,7 @@ Day.init({
 Day.belongsTo(Path, {foreignKey: 'idpath'})
 Day.belongsTo(Truck, {foreignKey: 'idtruck'})
 Day.belongsTo(User, {foreignKey: 'iddrive'})
+Day.belongsTo(User, {foreignKey: 'iduser'})
 // Payment.hasMany(Day, {foreignKey: 'idday'})
 
 export default Day;

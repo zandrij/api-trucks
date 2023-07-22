@@ -11,6 +11,7 @@ export interface DayAttributes {
     iddrive: number;
     idtruck: number;
     idpath: number;
+    iduser: number;
     routes: string;
     lts: number;
     dateStart: Date;

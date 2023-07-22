@@ -5,6 +5,7 @@ const createDaySchema = z.object({
         iddrive: z.number().min(1),
         idtruck: z.number().min(1),
         idpath: z.number().min(1),
+        iduser: z.number().min(1),
         lts: z.number().min(1),
         dateStart: z.string(),
         dateEnd: z.string().optional(),

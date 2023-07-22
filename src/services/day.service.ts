@@ -45,7 +45,7 @@ async function createDay(data:any, type: string) {
     // const zones = await Zones.findAll({where: {idpath: data.idpath}, attributes: ['name', 'lat', 'lng', 'id']});
     // if(!zones) return GlobalError.NOT_FOUND_DATA
     const path = await Path.findByPk(data.idpath);
-    const  clients = await path?.getUsers();
+    const clients = await path?.getUsers();
     if (!clients) return GlobalError.DATA_ALREADY_EXIST
     const drive = await User.findByPk(data.iddrive);
     if(!drive) return GlobalError.NOT_FOUND_DATA
@@ -57,7 +57,7 @@ async function createDay(data:any, type: string) {
         status: 'charging',
     })
     for await (let c of clients!) {
-        await Payment.create({idday: day.id, iduser: c.id, status: 'wait'})
+        await Payment.create({idday: day.id, iduser: data.iduser, status: 'wait'})
     }
     // const payment = await Payment.create({idday: day.id, iduser})
     return {...day.toJSON(), routes: day.routes};
