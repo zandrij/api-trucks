@@ -33,7 +33,12 @@ async function getDays({limit, page}: any, type: string) {
             {
                 model: Truck,
                 attributes: ['color', 'model', 'serial', 'lts', 'status']
-            }
+            },
+            {
+                model: User,
+                as: 'client',
+                attributes: ['name', 'lastName', 'email', 'dni', 'device', 'phone']
+            },
         ]
     });
     return {total: count, rows, limit, page};
@@ -46,7 +51,11 @@ async function createDay(data:any, type: string) {
     if (!clients) return GlobalError.DATA_ALREADY_EXIST
     const drive = await User.findByPk(data.iddrive);
     if(!drive) return GlobalError.NOT_FOUND_DATA
-    const client = await User.findByPk(data.iduser);
+    const client = await User.findByPk(data.iduser, {
+        attributes: {
+          exclude: ['password']
+        }
+      });
     if(!client) return GlobalError.NOT_FOUND_DATA
     const truck = await Truck.findByPk(data.idtruck);
     if(!truck) return GlobalError.NOT_FOUND_DATA

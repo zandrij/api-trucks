@@ -71,7 +71,7 @@ Day.init({
 Day.belongsTo(Path, {foreignKey: 'idpath'})
 Day.belongsTo(Truck, {foreignKey: 'idtruck'})
 Day.belongsTo(User, {foreignKey: 'iddrive'})
-Day.belongsTo(User, {foreignKey: 'iduser'})
+Day.belongsTo(User, {foreignKey: 'iduser', as: 'client'})
 // Payment.hasMany(Day, {foreignKey: 'idday'})
 
 export default Day;
