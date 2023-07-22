@@ -41,26 +41,24 @@ async function getDays({limit, page}: any, type: string) {
 }
 
 async function createDay(data:any, type: string) {
-    // if(type !== 'customer') return GlobalError.NOT_PERMITED_ACCESS;
-    // const zones = await Zones.findAll({where: {idpath: data.idpath}, attributes: ['name', 'lat', 'lng', 'id']});
-    // if(!zones) return GlobalError.NOT_FOUND_DATA
     const path = await Path.findByPk(data.idpath);
     const clients = await path?.getUsers();
     if (!clients) return GlobalError.DATA_ALREADY_EXIST
     const drive = await User.findByPk(data.iddrive);
     if(!drive) return GlobalError.NOT_FOUND_DATA
+    const client = await User.findByPk(data.iduser);
+    if(!client) return GlobalError.NOT_FOUND_DATA
     const truck = await Truck.findByPk(data.idtruck);
     if(!truck) return GlobalError.NOT_FOUND_DATA
     const day = await Day.create({
         ...data, 
-        // routes: JSON.stringify(zones.map(e => ({name: e.name, id: e.id, lat: e.lat, lng: e.lng, status: false}))),
         status: 'charging',
     })
-    for await (let c of clients!) {
-        await Payment.create({idday: day.id, iduser: data.iduser, status: 'wait'})
-    }
-    // const payment = await Payment.create({idday: day.id, iduser})
-    return {...day.toJSON(), routes: day.routes};
+    
+    const payment = await Payment.create({idday: day.id, iduser: day.iduser, status: 'wait'});
+    console.log( {...day.toJSON(), ...payment.toJSON(), ...client.toJSON()} )
+    
+    return {...day.toJSON(), ...payment.toJSON(), ...client.toJSON()};
 }
 
 async function updateDayStatus(id:number, status: "wait" | "charging" | "dispatching" | "end", type: string) {
