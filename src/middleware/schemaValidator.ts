@@ -13,6 +13,7 @@ export const schemaValidator =
         next();
     } catch (error) {
         handleHttp(res, GlobalError.ERROR_VALIDATION, error)
+        return;
     }
     
 }
