@@ -56,9 +56,9 @@ async function createDay(data:any, type: string) {
     })
     
     const payment = await Payment.create({idday: day.id, iduser: day.iduser, status: 'wait'});
-    console.log( {...day.toJSON(), ...payment.toJSON(), ...client.toJSON()} )
+    console.log( {...day.toJSON(), payment: payment.toJSON(), client: client.toJSON()} )
     
-    return {...day.toJSON(), ...payment.toJSON(), ...client.toJSON()};
+    return  {...day.toJSON(), payment: payment.toJSON(), client: client.toJSON()};
 }
 
 async function updateDayStatus(id:number, status: "wait" | "charging" | "dispatching" | "end", type: string) {
