@@ -7,7 +7,7 @@ const updateUserSchema = z.object({
         email: z.string().trim().email({message: "Email es inválido"}).optional(),
         dni: z.string().min(8).trim().optional(),
         phone: z.string().min(8).trim().optional(),
-        device: z.string().min(8).trim().optional(),
+        device: z.string().trim().optional(),
         address: z.string().trim().optional(),
     }),
     params: z.object({
