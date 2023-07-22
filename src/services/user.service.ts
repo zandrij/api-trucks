@@ -12,7 +12,7 @@ async function getUsers({limit, page, typeUser}: any, type: string) {
         offset,
         where: !typeUser ? {status: {[Op.eq]: 'active'}} : {[Op.and]: [{type: typeUser}, {status: 'active'}]},
         order: [['id', 'DESC']],
-        attributes: ['id', 'name', 'lastName', 'email', 'dni', 'type']
+        attributes: ['id', 'name', 'lastName', 'email', 'dni', 'type', 'phone']
     });
     return {total: count, rows, limit, page};
     // return {limit, offset, page}
