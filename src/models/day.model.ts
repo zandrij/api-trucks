@@ -17,7 +17,7 @@ class Day extends Model<DayAttributes, DayInput> implements DayAttributes {
     routes!: string;
     dateStart!: Date;
     dateEnd!: Date;
-    status!: "wait" | "charging" | "dispatching" | "end";
+    status!: "wait" | "charging" | "dispatching" | "end" | "null";
 
     public readonly createdAt!: Date;
     public readonly updateAt!: Date;

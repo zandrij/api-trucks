@@ -33,7 +33,7 @@ const updateFinallyDaySchema = z.object({
 
 const updateDayStatuschema = z.object({
     body: z.object({
-        status: z.enum(['wait', 'charging', 'dispatching', 'end']),
+        status: z.enum(['wait', 'charging', 'dispatching', 'end', 'null']),
     }),
     params: z.object({
         id: z.string().nonempty().transform((val, ctx) => {

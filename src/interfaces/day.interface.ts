@@ -16,7 +16,7 @@ export interface DayAttributes {
     lts: number;
     dateStart: Date;
     dateEnd: Date;
-    status: 'wait' | 'charging' | 'dispatching' | 'end';
+    status: 'wait' | 'charging' | 'dispatching' | 'end' | 'null';
     createAt?: Date;
     updateAt?: Date;
 
