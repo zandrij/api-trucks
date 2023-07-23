@@ -5,6 +5,8 @@ import User from "../models/user";
 import Day from "../models/day.model";
 import { Storage } from "../interfaces/storage.interface";
 import { columnsUser } from "../constants/columns";
+import Path from "../models/Path";
+import Truck from "../models/truck.model";
 
 async function getPayments({limit, page, day, path, user, status, start, end}: any, type: string) {
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
@@ -16,24 +18,48 @@ async function getPayments({limit, page, day, path, user, status, start, end}: a
         status: !status ? {} : {status: {[Op.eq]: status}},
         dates: !start || !end ? {} : {createdAt: {[Op.between]: [start, end]}}
     }
-    const {count, rows} = await Payment.findAndCountAll({
-        limit,
-        offset,
-        order: [['id', 'DESC']],
-        where: {...filters.day, ...filters.user, ...filters.status, ...filters.dates},
-        // subQuery: true,
-        include: [
+    const { count, rows } = await Payment.findAndCountAll({
+      limit,
+      offset,
+      order: [["id", "DESC"]],
+      where: {
+        ...filters.day,
+        ...filters.user,
+        ...filters.status,
+        ...filters.dates,
+      },
+      // subQuery: true,
+      include: [
+        {
+          model: User,
+          attributes: columnsUser,
+        },
+        {
+          model: Day,
+          where: filters.path,
+          attributes: [
+            "iddrive",
+            "idtruck",
+            "idpath",
+            "lts",
+            "dateStart",
+            "dateEnd",
+            "status",
+          ],
+          include: [
             {
-                model: User,
-                attributes: columnsUser
+              model: Path,
             },
             {
-                
-                model: Day,
-                where: filters.path,
-                attributes: ['iddrive', 'idtruck', 'idpath', 'lts', 'dateStart', 'dateEnd', 'status']
+              model: Truck,
+            },
+            {
+                model: User,
+                as:'client'
             }
-        ]
+          ],
+        },
+      ],
     });
     return {total: count, rows, limit, page};
     // return {limit, offset, page}
