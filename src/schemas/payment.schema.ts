@@ -93,6 +93,8 @@ const updatePaymentRefSchema = z.object({
     body: z.object({
         reference: z.string().trim().nonempty(),
         type: z.enum(['cash', 'transfer', 'mobile']),
+        status: z.enum(['wait', 'paid', 'reject', 'aproved', 'cancel']),
+        amount: z.string().trim().optional()
     }),
     params: z.object({
         id: z.string().nonempty().transform((val, ctx) => {

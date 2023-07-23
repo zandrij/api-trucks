@@ -40,7 +40,9 @@ const uploadPaidCtrl = async (req: RequestUser, res: Response) => {
             idUser: `${user?.id}`,
             path: `${file?.path}`,
             type: body.type,
-            reference: body.reference
+            reference: body.reference,
+            status: body.status,
+            amount: body.amount
         }
         const response = await paidPayment(params.id as unknown as number, dataToRegister)
         res.status(200).json({

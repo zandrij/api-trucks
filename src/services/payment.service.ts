@@ -72,10 +72,10 @@ async function updatePaymentStatus(id:number, status: "wait" | "paid" | "reject"
     return pay.toJSON();
 }
 
-async function paidPayment(id:number, {filename, reference, type}: Storage) {
+async function paidPayment(id:number, {filename, reference, type, status, amount}: Storage) {
     const pay = await Payment.findByPk(id);
     if(!pay) return GlobalError.NOT_FOUND_DATA;
-    pay.update({reference, image: filename, type, status: "paid"});
+    pay.update({reference, image: filename, type, status, amount});
     return pay.toJSON();
 }
 
