@@ -6,6 +6,7 @@ export interface PaymentAttributes {
     iduser: number;
     reference: string;
     image: string;
+    amount: string;
     type: 'cash' | 'transfer' | 'mobile'
     /**
      * ?wait: la data se creo y esta en espera de un pago,

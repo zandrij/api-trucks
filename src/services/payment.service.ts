@@ -39,10 +39,10 @@ async function getPayments({limit, page, day, path, user, status, start, end}: a
     // return {limit, offset, page}
 }
 
-async function updatePaymentStatus(id:number, status: "wait" | "paid" | "reject" | "aproved" | "cancel", type: string) {
+async function updatePaymentStatus(id:number, status: "wait" | "paid" | "reject" | "aproved" | "cancel", amount:string, type: string) {
     const pay = await Payment.findByPk(id);
     if(!pay) return GlobalError.NOT_FOUND_DATA;
-    pay.update({status});
+    pay.update({status, amount});
     return pay.toJSON();
 }
 

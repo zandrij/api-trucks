@@ -20,7 +20,7 @@ async function getPaymentsCtrl({query, user}:RequestUser, res: Response) {
 /** actualizar el estado de una jornada */
 async function updatePaymentStatusCtrl({params, user, body}:RequestUser, res: Response) {
     try {
-        const response = await updatePaymentStatus(params.id as unknown as number, body.status, `${user?.type}`);
+        const response = await updatePaymentStatus(params.id as unknown as number, body.status, body.amount, `${user?.type}`);
         res.status(200).json({
             data: response,
             ok: true,

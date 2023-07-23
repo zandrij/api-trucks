@@ -71,6 +71,7 @@ const getPaymentSchema = z.object({
 const updatePaymentStatuschema = z.object({
     body: z.object({
         status: z.enum(['wait', 'paid', 'reject', 'aproved', 'cancel']),
+        amount: z.string().trim().optional()
     }),
     params: z.object({
         id: z.string().nonempty().transform((val, ctx) => {

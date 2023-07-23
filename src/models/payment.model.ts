@@ -13,6 +13,7 @@ class Payment extends Model<PaymentAttributes, PaymentInput> implements PaymentA
     idday!: number;
     reference!: string;
     image!: string;
+    amount!: string;
     type!: "cash" | "transfer" | "mobile";
     status!: "wait" | "paid" | "reject" | "aproved" | "cancel";
 
@@ -41,6 +42,10 @@ Payment.init({
         allowNull: true
     },
     image: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    amount: {
         type: DataTypes.STRING,
         allowNull: true
     },
