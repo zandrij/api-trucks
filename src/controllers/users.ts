@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { RequestUser } from "../interfaces/users";
-import { getUserId, getUsers, logicDeleteUser, updateUser } from "../services/user.service";
+import { getUserId, getUserImei, getUsers, logicDeleteUser, updateUser } from "../services/user.service";
 import { handleHttp } from "../utils/error.handle";
 
 /** get user actives [all, customer, drive and owner] */
@@ -57,9 +57,21 @@ async function getUserIdCrtl({params}:RequestUser, res: Response) {
     }
 }
 
+async function getUserImeiCrtl({params}:RequestUser, res: Response) {
+    try {
+        const response = await getUserImei(params.device as unknown as string);
+        res.status(200).json({
+            data: response,
+            ok: true,
+        });
+    } catch (error) {
+        handleHttp(res, "INTERNAL_SERVER_ERROR", error);
+    }
+}
 export {
     getUsersCtrl,
     updateUserCtrl,
     deleteLoginUserCtrl,
-    getUserIdCrtl
+    getUserIdCrtl,
+    getUserImeiCrtl
 }

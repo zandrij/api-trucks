@@ -44,9 +44,16 @@ async function getUserId(id:number) {
     return user;
 }
 
+async function getUserImei(device:string) {
+    const user = await User.findOne({where: {device}, attributes: {exclude: ['password']}});
+    return user;
+}
+
+
 export {
     getUsers,
     updateUser,
     logicDeleteUser,
-    getUserId
+    getUserId,
+    getUserImei
 }
