@@ -1,4 +1,4 @@
-import { Op } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 import { GlobalError } from "../constants/global_errors";
 import Payment from "../models/payment.model";
 import User from "../models/user";
@@ -21,6 +21,7 @@ async function getPayments({limit, page, day, path, user, status, start, end}: a
     const { count, rows } = await Payment.findAndCountAll({
       limit,
       offset,
+      subQuery: false,
       order: [["id", "DESC"]],
       where: {
         ...filters.day,
@@ -28,13 +29,26 @@ async function getPayments({limit, page, day, path, user, status, start, end}: a
         ...filters.status,
         ...filters.dates,
       },
+      attributes: [
+        'id',
+        'idday',
+        'iduser',
+        'reference',
+        'image',
+        'type',
+        'status',
+        // [Sequelize.fn("SUM", Sequelize.col("amount")), "total"]
+      ],
       // subQuery: true,
       include: [
         {
+          // subQuery: false,
           model: User,
           attributes: columnsUser,
+          // as: 'Users'
         },
         {
+          subQuery: false,
           model: Day,
           where: filters.path,
           attributes: [
@@ -48,24 +62,29 @@ async function getPayments({limit, page, day, path, user, status, start, end}: a
           ],
           include: [
             {
+              // subQuery: false,
               model: Path,
             },
             {
+              // subQuery: false,
               model: Truck,
             },
             {
+              // subQuery: false,
                 model: User,
-                as:'client'
+                attributes: columnsUser
+                // as:'client'
             }
           ],
         },
       ],
+      // group: ['id']
     });
     return {total: count, rows, limit, page};
     // return {limit, offset, page}
 }
 
-async function updatePaymentStatus(id:number, status: "wait" | "paid" | "reject" | "aproved" | "cancel", amount:string, type: string) {
+async function updatePaymentStatus(id:number, status: "wait" | "paid" | "reject" | "aproved" | "cancel", amount:number, type: string) {
     const pay = await Payment.findByPk(id);
     if(!pay) return GlobalError.NOT_FOUND_DATA;
     pay.update({status, amount});

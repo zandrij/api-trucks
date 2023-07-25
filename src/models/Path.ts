@@ -2,6 +2,7 @@ import { sequelize } from "../config/db";
 import {BelongsToManyAddAssociationMixin, BelongsToManyGetAssociationsMixin, BelongsToManyHasAssociationMixin, BelongsToManyRemoveAssociationMixin, DataTypes, Model, NonAttribute} from 'sequelize'
 import { PathAttributes, PathInput } from "../interfaces/path.interface";
 import User from "./user";
+import Day from "./day.model";
 
 
 class Path extends Model<PathAttributes, PathInput> implements PathAttributes {
@@ -42,6 +43,7 @@ Path.init({
     sequelize: sequelize,
     // paranoid: true
 });
+
 Path.belongsToMany(User, {through: "PathAndUser"})
 // Path.hasMany(Zones, {foreignKey: 'idpath'});
 // Zones.belongsTo(Path, {foreignKey: 'idpath'});

@@ -10,6 +10,9 @@ class User extends Model<UserAttributes, UserInput> implements UserAttributes {
     password!: string;
     email!: string;
     dni!: string;
+    address!: string;
+    phone!: string;
+    device!: string;
     type!: "owner" | "customer" | "drive";
     status!: "active" | "deleted";
     
@@ -52,6 +55,18 @@ User.init({
     status: {
         type: DataTypes.ENUM,
         values: ['active', 'deleted']
+    },
+    phone: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    device: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    address: {
+        type: DataTypes.STRING,
+        allowNull: true,
     }
 }, {
     timestamps: true,

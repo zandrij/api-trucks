@@ -1,28 +1,42 @@
-import { parseArgs } from "util";
+import {Op, Sequelize} from 'sequelize';
 import { GlobalError } from "../constants/global_errors";
 import Path from "../models/Path";
 import User from "../models/user";
 import { PathUserAttributes } from "../interfaces/pathuser.interface";
 import { columnsUser } from "../constants/columns";
+import Day from "../models/day.model";
 
 async function getPaths({limit, page, customers}: any) {
     const offset = page === 1 ? 0 : Math.floor((limit * page) - limit);
-    const {count, rows} = await Path.findAndCountAll({
+    const rows = await Path.findAll({
         limit,
         offset,
+        // subQuery: false,
         order: [['id', 'DESC']],
-        // attributes: ['id', 'name'],
-        include: customers ? [
+        attributes: ['id', 'name', 'createdAt', [Sequelize.fn('COUNT', Sequelize.col('Days.id')), 'route']],
+        include: [
             {
-                model: User,
-                // as: 'users',
-                attributes: ['name', 'lastName', 'email', 'dni']
-            }
-        ] : undefined
+                model: Day,
+                
+                // foreignKey: 'idpath',
+                subQuery: false,
+                // where: {status: {[Op.eq]: 'end'}},
+                include: []
+            },
+        ],
+        group: ['Path.id', 'Days.id']
+        // include: customers ? [
+        //     {
+        //         model: User,
+        //         // as: 'users',
+        //         attributes: columnsUser
+        //     }
+        // ] : undefined
     });
     // const user = await User.findByPk(3);
     // rows[0].addUser(user as User);
-    return {total: count, rows, limit, page};
+    return {total: 0, rows, limit, page}
+    // return {total: count.length, rows, limit, page};
 
 
     

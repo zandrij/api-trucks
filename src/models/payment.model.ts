@@ -13,7 +13,7 @@ class Payment extends Model<PaymentAttributes, PaymentInput> implements PaymentA
     idday!: number;
     reference!: string;
     image!: string;
-    amount!: string;
+    amount!: number;
     type!: "cash" | "transfer" | "mobile";
     status!: "wait" | "paid" | "reject" | "aproved" | "cancel";
 
@@ -46,7 +46,7 @@ Payment.init({
         allowNull: true
     },
     amount: {
-        type: DataTypes.STRING,
+        type: DataTypes.DOUBLE,
         allowNull: true
     },
     type: {
@@ -66,6 +66,7 @@ Payment.init({
 
 Payment.belongsTo(User, {foreignKey: 'iduser'})
 Payment.belongsTo(Day, {foreignKey: 'idday'})
+User.hasMany(Payment, {foreignKey: 'iduser'})
 // Day.belongsTo(User, {foreignKey: 'iddrive'})
 
 export default Payment;

@@ -23,6 +23,7 @@ class Day extends Model<DayAttributes, DayInput> implements DayAttributes {
     public readonly updateAt!: Date;
     public path?: Path;
     public user?: User;
+    public driver?: User;
     public truck?: Truck;
 
 }
@@ -70,8 +71,18 @@ Day.init({
 
 Day.belongsTo(Path, {foreignKey: 'idpath'})
 Day.belongsTo(Truck, {foreignKey: 'idtruck'})
-Day.belongsTo(User, {foreignKey: 'iddrive'})
-Day.belongsTo(User, {foreignKey: 'iduser', as: 'client'})
+Day.belongsTo(User, {foreignKey: 'iddrive', as: 'driver'})
+// Day.belongsTo(User, {foreignKey: 'iduser'})
+User.hasMany(Day, {foreignKey: 'iddrive'})
+Path.hasMany(Day, {foreignKey: 'idpath'});
+
+
+// Day.belongsTo(Path, { foreignKey: 'idpath' });
+// Day.belongsTo(Truck, { foreignKey: 'idtruck' });
+// Day.belongsTo(User, { foreignKey: 'iddrive', as: 'driveUser' });
+// Day.belongsTo(User, { foreignKey: 'iduser', as: 'endUser' });
+// User.hasMany(Day, { foreignKey: 'iddrive', as: 'driveDays' });
+// Path.hasMany(Day, { foreignKey: 'idpath' });
 // Payment.hasMany(Day, {foreignKey: 'idday'})
 
 export default Day;
