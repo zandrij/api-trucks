@@ -32,7 +32,7 @@ async function updateUser(id:number, data: any, type: string) {
 // actualizar un usuario
 async function logicDeleteUser(id:number, type: string) {
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
-    const user = await User.findByPk(id);
+    const user = await User.findByPk(id, {attributes:{exclude: ['password']}});
     if(!user) return GlobalError.NOT_FOUND_DATA;
     user.update({status: 'deleted'})
     // day.update({status});

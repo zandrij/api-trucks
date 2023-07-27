@@ -8,12 +8,12 @@ const createOnlyPathSchema = z.object({
 });
 
 /** agregar un usuario a un path */
-const addUserToPathSchema = z.object({
-    body: z.object({
-        pathId: z.number().min(1).nonnegative(),
-        userId: z.number().min(1).nonnegative(),
-    })
-});
+// const addUserToPathSchema = z.object({
+//     body: z.object({
+//         pathId: z.number().min(1).nonnegative(),
+//         userId: z.number().min(1).nonnegative(),
+//     })
+// });
 
 /** obtener paths */
 const getPathsSchema = z.object({
@@ -40,9 +40,9 @@ const getPathsSchema = z.object({
             }
             return result;
         }).default('1'),
-        customers: z.string().optional().transform((val) => {
-            return (val === 'true')
-        })
+        // customers: z.string().optional().transform((val) => {
+        //     return (val === 'true')
+        // })
         // zones: z.string().optional().transform((val) => {
         //     return (val === 'true')
         // })
@@ -50,32 +50,32 @@ const getPathsSchema = z.object({
 });
 
 /** remover usuario de un path paths */
-const removeUserToPathSchema = z.object({
-    query: z.object({
-        pathId: z.string().nonempty().transform((val, ctx) => {
-            const result = parseInt(val);
-            if (isNaN(result)) {
-                ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    message: "id no es un numero"
-                });
-                return z.NEVER;
-            }
-            return result;
-        }),
-        userId: z.string().nonempty().transform((val, ctx) => {
-            const result = parseInt(val);
-            if (isNaN(result)) {
-                ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    message: "id no es un numero"
-                });
-                return z.NEVER;
-            }
-            return result;
-        })
-    }),
-});
+// const removeUserToPathSchema = z.object({
+//     query: z.object({
+//         pathId: z.string().nonempty().transform((val, ctx) => {
+//             const result = parseInt(val);
+//             if (isNaN(result)) {
+//                 ctx.addIssue({
+//                     code: z.ZodIssueCode.custom,
+//                     message: "id no es un numero"
+//                 });
+//                 return z.NEVER;
+//             }
+//             return result;
+//         }),
+//         userId: z.string().nonempty().transform((val, ctx) => {
+//             const result = parseInt(val);
+//             if (isNaN(result)) {
+//                 ctx.addIssue({
+//                     code: z.ZodIssueCode.custom,
+//                     message: "id no es un numero"
+//                 });
+//                 return z.NEVER;
+//             }
+//             return result;
+//         })
+//     }),
+// });
 
 // update path schema validator
 const updatePathSchema = z.object({
@@ -117,8 +117,8 @@ const getOnePathSchema = z.object({
 export {
     createOnlyPathSchema,
     getPathsSchema,
-    addUserToPathSchema,
-    removeUserToPathSchema,
+    // addUserToPathSchema,
+    // removeUserToPathSchema,
     updatePathSchema,
     getOnePathSchema
 }

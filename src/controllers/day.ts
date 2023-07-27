@@ -7,7 +7,7 @@ import { GlobalError } from "../constants/global_errors";
 async function createDayCtrl({body, user}:RequestUser, res: Response) {
     try {
         const response = await createDay(body, `${user?.type}`);
-        if(response ===  GlobalError.DATA_ALREADY_EXIST) {
+        if(response as any ===  GlobalError.DATA_ALREADY_EXIST) {
             return res.status(400).json({
                 error: response,
                 ok: false,

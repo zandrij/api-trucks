@@ -33,6 +33,7 @@ async function getPayments({limit, page, day, path, user, status, start, end}: a
         {
           model: User,
           attributes: columnsUser,
+          as: 'client'
         },
         {
           model: Day,
@@ -55,7 +56,8 @@ async function getPayments({limit, page, day, path, user, status, start, end}: a
             },
             {
                 model: User,
-                as:'client'
+                attributes: columnsUser,
+                as:'drive'
             }
           ],
         },
@@ -65,17 +67,18 @@ async function getPayments({limit, page, day, path, user, status, start, end}: a
     // return {limit, offset, page}
 }
 
-async function updatePaymentStatus(id:number, status: "wait" | "paid" | "reject" | "aproved" | "cancel", amount:string, type: string) {
+async function updatePaymentStatus(id:number, status: "wait" | "paid" | "reject" | "aproved" | "cancel", amount:number, type: string) {
     const pay = await Payment.findByPk(id);
     if(!pay) return GlobalError.NOT_FOUND_DATA;
     pay.update({status, amount});
     return pay.toJSON();
 }
 
-async function paidPayment(id:number, {filename, reference, type, status, amount}: Storage) {
+
+async function paidPayment(id:number, {filename, reference, type, amount}: Storage) {
     const pay = await Payment.findByPk(id);
     if(!pay) return GlobalError.NOT_FOUND_DATA;
-    pay.update({reference, image: filename, type, status, amount});
+    pay.update({reference, image: filename, type, status: 'paid', amount});
     return pay.toJSON();
 }
 
