@@ -71,8 +71,8 @@ Day.init({
 
 Day.belongsTo(Path, {foreignKey: 'idpath'})
 Day.belongsTo(Truck, {foreignKey: 'idtruck'})
-Day.belongsTo(User, {foreignKey: 'iddrive', as: 'driver'})
-// Day.belongsTo(User, {foreignKey: 'iduser'})
+Day.belongsTo(User, {foreignKey: 'iddrive'})
+Day.belongsTo(User, {foreignKey: 'iduser', as: 'client'})
 User.hasMany(Day, {foreignKey: 'iddrive'})
 Path.hasMany(Day, {foreignKey: 'idpath'});
 

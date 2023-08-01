@@ -12,11 +12,11 @@ async function getPayments({limit, page, day, path, user, status, start, end}: a
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
     const offset = page === 1 ? 0 : Math.floor((limit * page) - limit);
     const filters ={
-        day: day === 0 ? {} : {idday: {[Op.eq]: day}},
-        path: path === 0 ? undefined : {idpath: {[Op.eq]: path}},
-        user: user === 0 ? {} : {iduser: {[Op.eq]: user}},
-        status: !status ? {} : {status: {[Op.eq]: status}},
-        dates: !start || !end ? {} : {createdAt: {[Op.between]: [start, end]}}
+      day: day === 0 ? {} : {idday: {[Op.eq]: day}},
+      path: path === 0 ? undefined : {idpath: {[Op.eq]: path}},
+      user: user === 0 ? {} : {iduser: {[Op.eq]: user}},
+      status: !status ? {} : {status: {[Op.eq]: status}},
+      dates: !start || !end ? {} : {createdAt: {[Op.between]: [start, end]}}
     }
     const { count, rows } = await Payment.findAndCountAll({
       limit,
@@ -37,6 +37,7 @@ async function getPayments({limit, page, day, path, user, status, start, end}: a
         'image',
         'type',
         'status',
+        'amount',
         // [Sequelize.fn("SUM", Sequelize.col("amount")), "total"]
       ],
       // subQuery: true,
@@ -45,7 +46,6 @@ async function getPayments({limit, page, day, path, user, status, start, end}: a
           // subQuery: false,
           model: User,
           attributes: columnsUser,
-          // as: 'Users'
         },
         {
           subQuery: false,
@@ -55,6 +55,7 @@ async function getPayments({limit, page, day, path, user, status, start, end}: a
             "iddrive",
             "idtruck",
             "idpath",
+            "iduser",
             "lts",
             "dateStart",
             "dateEnd",
@@ -70,10 +71,9 @@ async function getPayments({limit, page, day, path, user, status, start, end}: a
               model: Truck,
             },
             {
-              // subQuery: false,
+            //   // subQuery: false,
                 model: User,
                 attributes: columnsUser
-                // as:'client'
             }
           ],
         },
@@ -98,8 +98,31 @@ async function paidPayment(id:number, {filename, reference, type, status, amount
     return pay.toJSON();
 }
 
+async function reportPayment({start, end, status, user, path}: any, type: string) {
+  if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
+
+    const filters ={
+    path: path === 0 ? undefined : {idpath: {[Op.eq]: path}},
+    user: user === 0 ? {} : {iduser: {[Op.eq]: user}},
+    status: !status ? {} : {status: {[Op.eq]: status}},
+    dates: !start || !end ? {} : {createdAt: {[Op.between]: [new Date(start), new Date(end)]}}
+  }
+
+  return await Payment.findAll({
+    where: {
+      ...filters.dates,
+      ...filters.path,
+      ...filters.status,
+      ...filters.user
+    }
+  })
+
+  return {filters}
+}
+
 export {
     getPayments,
     updatePaymentStatus,
-    paidPayment
+    paidPayment,
+    reportPayment
 }

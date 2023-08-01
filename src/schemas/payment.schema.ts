@@ -112,8 +112,40 @@ const updatePaymentRefSchema = z.object({
 });
 
 
+
+const reporterPaymentSchema = z.object({
+    query: z.object({
+        path: z.string().optional().transform((val, ctx) => {
+            const result = parseInt(val!);
+            if (isNaN(result)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "id no es un numero"
+                });
+                return z.NEVER;
+            }
+            return result;
+        }).default('0'),
+        user: z.string().optional().transform((val, ctx) => {
+            const result = parseInt(val!);
+            if (isNaN(result)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "id no es un numero"
+                });
+                return z.NEVER;
+            }
+            return result;
+        }).default('0'),
+        status: z.string().trim().optional(),
+        start: z.string().trim(),
+        end: z.string().trim()
+    })
+});
+
 export {
     getPaymentSchema,
     updatePaymentStatuschema,
-    updatePaymentRefSchema
+    updatePaymentRefSchema,
+    reporterPaymentSchema
 }
