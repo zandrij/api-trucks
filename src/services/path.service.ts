@@ -6,32 +6,13 @@ import { PathUserAttributes } from "../interfaces/pathuser.interface";
 import { columnsUser } from "../constants/columns";
 import Day from "../models/day.model";
 
-async function getPaths({limit, page, customers}: any) {
+async function getPaths({limit, page}: any) {
     const offset = page === 1 ? 0 : Math.floor((limit * page) - limit);
     const rows = await Path.findAll({
         limit,
         offset,
         // subQuery: false,
         order: [['id', 'DESC']],
-        attributes: ['id', 'name', 'createdAt', [Sequelize.fn('COUNT', Sequelize.col('Days.id')), 'route']],
-        include: [
-            {
-                model: Day,
-                
-                // foreignKey: 'idpath',
-                subQuery: false,
-                // where: {status: {[Op.eq]: 'end'}},
-                include: []
-            },
-        ],
-        group: ['Path.id', 'Days.id']
-        // include: customers ? [
-        //     {
-        //         model: User,
-        //         // as: 'users',
-        //         attributes: columnsUser
-        //     }
-        // ] : undefined
     });
     // const user = await User.findByPk(3);
     // rows[0].addUser(user as User);
@@ -66,40 +47,40 @@ async function createOnlyPath(data:any, type: string) {
     return ph.toJSON();
 }
 
-// agrega un usuario a un path
-async function AddUserToPath(data:PathUserAttributes, type: string) {
-    if(type !== 'owner') throw GlobalError.NOT_PERMITED_ACCESS;
-    const path = await Path.findByPk(data.pathId);
-    const result = await path?.getUsers();
-    let flag = false;
-    for (let i = 0; i < result!.length; i++) {
-        if(result![i].id === data.userId) {
-            flag = true;
-            break;
-        }
-    }
-    if(flag) {
-        throw GlobalError.DATA_ALREADY_EXIST
-    }
-    const user = await User.findByPk(data.userId, {attributes: columnsUser});
-    if(!user) {
-        throw GlobalError.NOT_FOUND_DATA;
-    }
-    path?.addUser(user);
-    return user.toJSON();
-}
+//! agrega un usuario a un path
+// async function AddUserToPath(data:PathUserAttributes, type: string) {
+//     if(type !== 'owner') throw GlobalError.NOT_PERMITED_ACCESS;
+//     const path = await Path.findByPk(data.pathId);
+//     const result = await path?.getUsers();
+//     let flag = false;
+//     for (let i = 0; i < result!.length; i++) {
+//         if(result![i].id === data.userId) {
+//             flag = true;
+//             break;
+//         }
+//     }
+//     if(flag) {
+//         throw GlobalError.DATA_ALREADY_EXIST
+//     }
+//     const user = await User.findByPk(data.userId, {attributes: columnsUser});
+//     if(!user) {
+//         throw GlobalError.NOT_FOUND_DATA;
+//     }
+//     path?.addUser(user);
+//     return user.toJSON();
+// }
 
-// agrega un usuario a un path
-async function removeUserToPath({pathId, userId}:any, type: string) {
-    if(type !== 'owner') throw GlobalError.NOT_PERMITED_ACCESS;
-    const path = await Path.findByPk(pathId);
-    const user = await User.findByPk(userId, {attributes: columnsUser});
-    if(!user) {
-        throw GlobalError.NOT_FOUND_DATA;
-    }
-    await path?.removeUser(user);
-    return user?.toJSON();
-}
+//! agrega un usuario a un path
+// async function removeUserToPath({pathId, userId}:any, type: string) {
+//     if(type !== 'owner') throw GlobalError.NOT_PERMITED_ACCESS;
+//     const path = await Path.findByPk(pathId);
+//     const user = await User.findByPk(userId, {attributes: columnsUser});
+//     if(!user) {
+//         throw GlobalError.NOT_FOUND_DATA;
+//     }
+//     await path?.removeUser(user);
+//     return user?.toJSON();
+// }
 
 async function updatePath(id:number, data: any, type: string) {
     if(type !== 'owner') throw GlobalError.NOT_PERMITED_ACCESS;
@@ -109,18 +90,18 @@ async function updatePath(id:number, data: any, type: string) {
     return path.toJSON();
 }
 
-async function getOnePathWithUsers(id: number, type: string) {
-    const path = await Path.findByPk(id);
-    if(!path) throw GlobalError.NOT_FOUND_DATA;
-    return await path.getUsers({attributes: columnsUser});
-}
+// async function getOnePathWithUsers(id: number, type: string) {
+//     const path = await Path.findByPk(id);
+//     if(!path) throw GlobalError.NOT_FOUND_DATA;
+//     return await path.getUsers({attributes: columnsUser});
+// }
 
 export {
     getPaths,
     createOnlyPath,
-    AddUserToPath,
-    removeUserToPath,
+    // AddUserToPath,
+    // removeUserToPath,
     updatePath,
-    getOnePathWithUsers,
+    // getOnePathWithUsers,
     getOnePath
 }

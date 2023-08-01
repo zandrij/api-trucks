@@ -47,8 +47,8 @@ async function getDays({limit, page}: any, type: string) {
 
 async function createDay(data:any, type: string) {
     const path = await Path.findByPk(data.idpath);
-    const clients = await path?.getUsers();
-    if (!clients) return GlobalError.DATA_ALREADY_EXIST
+    // const clients = await path?.getUsers();
+    // if (!clients) return GlobalError.DATA_ALREADY_EXIST
     const drive = await User.findByPk(data.iddrive);
     if(!drive) return GlobalError.NOT_FOUND_DATA
     const client = await User.findByPk(data.iduser, {
@@ -64,8 +64,8 @@ async function createDay(data:any, type: string) {
         status: 'charging',
     })
     
-    const payment = await Payment.create({idday: day.id, iduser: day.iduser, status: 'wait'});
-    console.log( {...day.toJSON(), payment: payment.toJSON(), client: client.toJSON()} )
+    const payment = await Payment.create({idday: day.id, amount: 0, iduser: day.iduser, status: 'wait'});
+    // console.log( {...day.toJSON(), payment: payment.toJSON(), client: client.toJSON()} )
     
     return  {...day.toJSON(), payment: payment.toJSON(), client: client.toJSON()};
 }

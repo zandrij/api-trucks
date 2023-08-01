@@ -46,6 +46,7 @@ async function getPayments({limit, page, day, path, user, status, start, end}: a
           // subQuery: false,
           model: User,
           attributes: columnsUser,
+          as: 'client'
         },
         {
           subQuery: false,
@@ -73,7 +74,8 @@ async function getPayments({limit, page, day, path, user, status, start, end}: a
             {
             //   // subQuery: false,
                 model: User,
-                attributes: columnsUser
+                attributes: columnsUser,
+                as:'drive'
             }
           ],
         },
@@ -91,10 +93,11 @@ async function updatePaymentStatus(id:number, status: "wait" | "paid" | "reject"
     return pay.toJSON();
 }
 
-async function paidPayment(id:number, {filename, reference, type, status, amount}: Storage) {
+
+async function paidPayment(id:number, {filename, reference, type, amount}: Storage) {
     const pay = await Payment.findByPk(id);
     if(!pay) return GlobalError.NOT_FOUND_DATA;
-    pay.update({reference, image: filename, type, status, amount});
+    pay.update({reference, image: filename, type, status: 'paid', amount});
     return pay.toJSON();
 }
 

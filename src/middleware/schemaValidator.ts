@@ -7,9 +7,10 @@ export const schemaValidator =
 (schema: AnyZodObject) => 
 (req: Request, res: Response, next: NextFunction) => {
     try {
-        const {params, query} = schema.parse({body: req.body, params: req.params, query: req.query});
+        const {params, query, body} = schema.parse({body: req.body, params: req.params, query: req.query});
         req.params = params;
         req.query = query;
+        req.body = body
         next();
     } catch (error) {
         handleHttp(res, GlobalError.ERROR_VALIDATION, error)

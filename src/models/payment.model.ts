@@ -64,7 +64,7 @@ Payment.init({
     // paranoid: true
 });
 
-Payment.belongsTo(User, {foreignKey: 'iduser'})
+Payment.belongsTo(User, {foreignKey: 'iduser', as: 'client'})
 Payment.belongsTo(Day, {foreignKey: 'idday'})
 User.hasMany(Payment, {foreignKey: 'iduser'})
 // Day.belongsTo(User, {foreignKey: 'iddrive'})

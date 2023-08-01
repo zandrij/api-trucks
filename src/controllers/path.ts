@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AddUserToPath, createOnlyPath, getOnePath, getOnePathWithUsers, getPaths, removeUserToPath, updatePath } from "../services/path.service";
+import { createOnlyPath, getOnePath, getPaths, updatePath } from "../services/path.service";
 import { handleHttp } from "../utils/error.handle";
 import { RequestUser } from "../interfaces/users";
 
@@ -45,33 +45,33 @@ async function createOnlyPathCtrl({body, user}:RequestUser, res: Response) {
     }
 }
 
-/** crear un path */
-async function AddUserToPathCtrl({body, user}:RequestUser, res: Response) {
-    try {
-        const response = await AddUserToPath(body, `${user?.type}`);
-        res.status(200).json({
-            response,
-            ok: true,
-            message: "agregado exitosamente"
-        });
-    } catch (error) {
-        handleHttp(res, "INTERNAL_SERVER_ERROR", error);
-    }
-}
+/** agregar usuario a un path */
+// async function AddUserToPathCtrl({body, user}:RequestUser, res: Response) {
+//     try {
+//         const response = await AddUserToPath(body, `${user?.type}`);
+//         res.status(200).json({
+//             response,
+//             ok: true,
+//             message: "agregado exitosamente"
+//         });
+//     } catch (error) {
+//         handleHttp(res, "INTERNAL_SERVER_ERROR", error);
+//     }
+// }
 
-/** crear un path */
-async function removeUserToPathCtrl({query, user}:RequestUser, res: Response) {
-    try {
-        const response = await removeUserToPath(query, `${user?.type}`);
-        res.status(200).json({
-            response,
-            ok: true,
-            message: "Eliminado con exito"
-        });
-    } catch (error) {
-        handleHttp(res, "INTERNAL_SERVER_ERROR", error);
-    }
-}
+/** remove user from path */
+// async function removeUserToPathCtrl({query, user}:RequestUser, res: Response) {
+//     try {
+//         const response = await removeUserToPath(query, `${user?.type}`);
+//         res.status(200).json({
+//             response,
+//             ok: true,
+//             message: "Eliminado con exito"
+//         });
+//     } catch (error) {
+//         handleHttp(res, "INTERNAL_SERVER_ERROR", error);
+//     }
+// }
 
 
 /** actualizar un path */
@@ -89,27 +89,27 @@ async function updatePathCtrl({params, user, body}:RequestUser, res: Response) {
 }
 
 /** obtener los usuarios de un path */
-async function getOnePathWithUsersCtrl({params, user}:RequestUser, res: Response) {
-    try {
-        const response = await getOnePathWithUsers(params.id as unknown as number, `${user?.type}`);
-        res.status(200).json({
-            data: response,
-            ok: true,
-            message: ""
-        });
-    } catch (error) {
-        handleHttp(res, "INTERNAL_SERVER_ERROR", error);
-    }
-}
+// async function getOnePathWithUsersCtrl({params, user}:RequestUser, res: Response) {
+//     try {
+//         const response = await getOnePathWithUsers(params.id as unknown as number, `${user?.type}`);
+//         res.status(200).json({
+//             data: response,
+//             ok: true,
+//             message: ""
+//         });
+//     } catch (error) {
+//         handleHttp(res, "INTERNAL_SERVER_ERROR", error);
+//     }
+// }
 
 
 
 export {
     getPathCtrl,
     createOnlyPathCtrl,
-    AddUserToPathCtrl,
-    removeUserToPathCtrl,
+    // AddUserToPathCtrl,
+    // removeUserToPathCtrl,
     updatePathCtrl,
-    getOnePathWithUsersCtrl,
+    // getOnePathWithUsersCtrl,
     getOnePathCtrl
 }

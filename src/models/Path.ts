@@ -1,8 +1,6 @@
 import { sequelize } from "../config/db";
-import {BelongsToManyAddAssociationMixin, BelongsToManyGetAssociationsMixin, BelongsToManyHasAssociationMixin, BelongsToManyRemoveAssociationMixin, DataTypes, Model, NonAttribute} from 'sequelize'
+import {DataTypes, Model} from 'sequelize'
 import { PathAttributes, PathInput } from "../interfaces/path.interface";
-import User from "./user";
-import Day from "./day.model";
 
 
 class Path extends Model<PathAttributes, PathInput> implements PathAttributes {
@@ -15,13 +13,13 @@ class Path extends Model<PathAttributes, PathInput> implements PathAttributes {
     // public readonly users?: User[];
     // public readonly zones?: Zones[];
 
-    declare getUsers: BelongsToManyGetAssociationsMixin<User>;
-    declare removeUser: BelongsToManyRemoveAssociationMixin<User, User>
-    declare addUser: BelongsToManyAddAssociationMixin<User, 'id'>
+    // declare getUsers: BelongsToManyGetAssociationsMixin<User>;
+    // declare removeUser: BelongsToManyRemoveAssociationMixin<User, User>
+    // declare addUser: BelongsToManyAddAssociationMixin<User, 'id'>
 
-    public static associate(models: any):void {
-        Path.belongsToMany(models.User, {through: 'PathAndUser'});
-    }
+    // public static associate(models: any):void {
+    //     Path.belongsToMany(models.User, {through: 'PathAndUser'});
+    // }
 
     // declare users?: NonAttribute<User[]>;
 
@@ -43,8 +41,7 @@ Path.init({
     sequelize: sequelize,
     // paranoid: true
 });
-
-Path.belongsToMany(User, {through: "PathAndUser"})
+// Path.belongsToMany(User, {through: "PathAndUser"})
 // Path.hasMany(Zones, {foreignKey: 'idpath'});
 // Zones.belongsTo(Path, {foreignKey: 'idpath'});
 
