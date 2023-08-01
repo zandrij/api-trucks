@@ -75,7 +75,7 @@ async function getPayments({limit, page, day, path, user, status, start, end}: a
             //   // subQuery: false,
                 model: User,
                 attributes: columnsUser,
-                as:'drive'
+                // as:'drive'
             }
           ],
         },
