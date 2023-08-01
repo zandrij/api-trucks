@@ -1,9 +1,6 @@
 import { sequelize } from "../config/db";
-import {DataTypes, Sequelize, Model, BelongsToManyGetAssociationsMixin} from 'sequelize'
+import {DataTypes, Model} from 'sequelize'
 import { UserAttributes, UserInput } from "../interfaces/users";
-import Path from "./Path";
-import Payment from "./payment.model";
-
 
 class User extends Model<UserAttributes, UserInput> implements UserAttributes {
     id!: number;

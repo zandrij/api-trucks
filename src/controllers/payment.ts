@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { RequestUser } from "../interfaces/users";
 import { handleHttp } from "../utils/error.handle";
-import { getPayments, paidPayment, updatePaymentStatus } from "../services/payment.service";
+import { getPayments, paidPayment, reportPayment, updatePaymentStatus } from "../services/payment.service";
 import { Storage } from "../interfaces/storage.interface";
 
 /** get all days */
@@ -55,8 +55,23 @@ const uploadPaidCtrl = async (req: RequestUser, res: Response) => {
     }
 }
 
+
+const reportPaymentCtrl = async ({query, user}: RequestUser, res:Response) => {
+    try {
+        const response = await reportPayment({...query}, `${user?.type}`);
+        return res.status(200).json({
+            data: response,
+            ok: true
+        })
+    } catch (e) {
+        handleHttp(res, "INTERNAL_SERVER_ERROR", e);
+    }
+}
+
+
 export {
     getPaymentsCtrl,
     updatePaymentStatusCtrl,
-    uploadPaidCtrl
+    uploadPaidCtrl,
+    reportPaymentCtrl
 }

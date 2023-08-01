@@ -5,5 +5,5 @@ export interface Storage {
     reference: string;
     type: 'cash' | 'transfer' | 'mobile';
     status: "wait" | "paid" | "reject" | "aproved" | "cancel";
-    amount: string;
+    amount: number;
 }

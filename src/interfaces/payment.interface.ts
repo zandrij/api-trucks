@@ -6,7 +6,7 @@ export interface PaymentAttributes {
     iduser: number;
     reference: string;
     image: string;
-    amount: string;
+    amount: number;
     type: 'cash' | 'transfer' | 'mobile'
     /**
      * ?wait: la data se creo y esta en espera de un pago,
@@ -22,5 +22,5 @@ export interface PaymentAttributes {
 
 }
 
-export interface PaymentInput extends Optional<PaymentAttributes, 'id' | 'reference' | 'type' | 'image'> {}
+export interface PaymentInput extends Optional<PaymentAttributes, 'id' | 'reference' | 'type' | 'amount' | 'image'> {}
 export interface PaymentOuput extends Required<PaymentAttributes> {}

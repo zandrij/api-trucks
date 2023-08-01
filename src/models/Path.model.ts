@@ -2,6 +2,7 @@ import { sequelize } from "../config/db";
 import {DataTypes, Model} from 'sequelize'
 import { PathAttributes, PathInput } from "../interfaces/path.interface";
 import Zones from "./zones.model";
+import Day from "./day.model";
 
 
 class Path extends Model<PathAttributes, PathInput> implements PathAttributes {
@@ -28,8 +29,9 @@ Path.init({
     // paranoid: true
 });
 
-Path.hasMany(Zones, {foreignKey: 'idpath'});
-Zones.belongsTo(Path, {foreignKey: 'idpath'});
+// Path.hasMany(Zones, {foreignKey: 'idpath'});
+// Zones.belongsTo(Path, {foreignKey: 'idpath'});
+// Path.hasMany(Day, {foreignKey: 'idpath'});
 
 // Path.hasMany(Zones);
 
