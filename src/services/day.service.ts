@@ -17,10 +17,11 @@ interface RouteDay {
 async function getDays({limit, page}: any, type: string) {
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
     const offset = page === 1 ? 0 : Math.floor((limit * page) - limit);
-    const {count, rows} = await Day.findAndCountAll({
+    const rows = await Day.findAll({
         limit,
         offset,
         order: [['id', 'DESC']],
+        attributes: ['iddrive', 'status'],
         include: [
             {
                 model: Path,
@@ -28,6 +29,7 @@ async function getDays({limit, page}: any, type: string) {
             },
             {
                 model: User,
+                // as: 'driver',
                 attributes: ['name', 'lastName', 'email', 'dni']
             },
             {
@@ -41,7 +43,7 @@ async function getDays({limit, page}: any, type: string) {
             },
         ]
     });
-    return {total: count, rows, limit, page};
+    return {total: 0, rows, limit, page};
     // return {limit, offset, page}
 }
 
