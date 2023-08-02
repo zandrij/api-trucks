@@ -14,10 +14,10 @@ import Day from '../models/day.model';
  * totalAmount: 39.8 // total de dinero sumando los 3 recorridos
  * }
  */
-async function getCustomerBuyTotal({limit, page}: any, type: string) {
+async function getCustomerBuyTotal({limit, page, start, end}: any, type: string) {
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
     const offset = page === 1 ? 0 : Math.floor((limit * page) - limit);
-    
+    const dates = !start || !end ? {} : {createdAt: {[Op.between]: [start, end]}}
     const count = await User.count({where: {
         type: {[Op.eq]: 'customer'},
     }});
@@ -28,6 +28,7 @@ async function getCustomerBuyTotal({limit, page}: any, type: string) {
         order: [['total', 'DESC']],
         where: {
             type: {[Op.eq]: 'customer'},
+            ...dates
         },
         attributes: [
             ...columnsUser, 
@@ -47,15 +48,15 @@ async function getCustomerBuyTotal({limit, page}: any, type: string) {
 }
 
 // path con contador de recorridos o jornadas
-async function getPathWithDays({limit, page}: any, type: string) {
+async function getPathWithDays({limit, page, start, end}: any, type: string) {
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
     const offset = page === 1 ? 0 : Math.floor((limit * page) - limit);
-    
+    const dates = !start || !end ? {} : {createdAt: {[Op.between]: [start, end]}}
     const count = await Path.count({include: [
         {
             model: Day,
             // subQuery: false,
-            where: {status: {[Op.eq]: 'end'}},
+            where: {status: {[Op.eq]: 'end'},...dates},
             attributes: []
         }
     ]});
@@ -74,7 +75,7 @@ async function getPathWithDays({limit, page}: any, type: string) {
             {
                 model: Day,
                 // subQuery: false,
-                where: {status: {[Op.eq]: 'end'}},
+                where: {status: {[Op.eq]: 'end'}, ...dates},
                 attributes: []
             }
         ],
@@ -84,16 +85,16 @@ async function getPathWithDays({limit, page}: any, type: string) {
 }
 
 // path con contador de recorridos o jornadas
-async function getDriverDayEnd({limit, page}: any, type: string) {
+async function getDriverDayEnd({limit, page, start, end}: any, type: string) {
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
     const offset = page === 1 ? 0 : Math.floor((limit * page) - limit);
-    
+    const dates = !start || !end ? {} : {createdAt: {[Op.between]: [start, end]}}
     const count = await User.count({where: {
-        type: {[Op.eq]: 'drive'},
+        type: {[Op.eq]: 'drive'}
     }, include: [
         {
             model: Day,
-            where: {status: {[Op.eq]: 'end'}},
+            where: {status: {[Op.eq]: 'end'}, ...dates},
             attributes: []
         }
     ]});
@@ -113,7 +114,7 @@ async function getDriverDayEnd({limit, page}: any, type: string) {
         include: [
             {
                 model: Day,
-                where: {status: {[Op.eq]: 'end'}},
+                where: {status: {[Op.eq]: 'end'},...dates},
                 attributes: []
             }
         ],
