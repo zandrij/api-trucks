@@ -63,7 +63,7 @@ async function getUserImeiCrtl({params}:RequestUser, res: Response) {
         const response = await getUserImei(params.device as unknown as string);
         if(response) {
             const token = generateToken({ id: response.id, type: response.type });
-            let ressponse = {...response, token};
+            let ressponse = {...response.get({plain: true}), token};
             res.status(200).json({
                 data: ressponse,
                 ok: true,
