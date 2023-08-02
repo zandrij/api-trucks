@@ -24,13 +24,17 @@ const getReportSchema = z.object({
             }
             return result;
         }).default('1'),
+        start: z.string().trim().optional(),
+        end: z.string().trim().optional(),
     }),
 });
 
 
 const generateExcelReportSchema = z.object({
     query: z.object({
-        route: z.string().trim().nonempty()
+        route: z.string().trim().nonempty(),
+        start: z.string().trim().optional(),
+        end: z.string().trim().optional(),
     }),
 });
 

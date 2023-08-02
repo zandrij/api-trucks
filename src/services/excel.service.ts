@@ -6,8 +6,9 @@ import { columnsUser } from '../constants/columns';
 import Payment from '../models/payment.model';
 import Path from '../models/Path';
 import Day from '../models/day.model';
-async function generateExcelReport({route}:any, type: string) {
+async function generateExcelReport({route, start, end}:any, type: string) {
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
+    const dates = !start || !end ? {} : {createdAt: {[Op.between]: [start, end]}}
     if(route === 'drive') {
         const rows = await User.findAll({
             subQuery: false,

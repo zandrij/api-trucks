@@ -17,7 +17,7 @@ interface RouteDay {
 async function getDays({limit, page}: any, type: string) {
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
     const offset = page === 1 ? 0 : Math.floor((limit * page) - limit);
-    const rows = await Day.findAll({
+    const {count, rows} = await Day.findAndCountAll({
         limit,
         offset,
         order: [['id', 'DESC']],
@@ -43,7 +43,7 @@ async function getDays({limit, page}: any, type: string) {
             },
         ]
     });
-    return {total: 0, rows, limit, page};
+    return {total: count, rows, limit, page};
     // return {limit, offset, page}
 }
 
