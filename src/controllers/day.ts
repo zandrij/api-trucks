@@ -24,9 +24,9 @@ async function createDayCtrl({body, user}:RequestUser, res: Response) {
     }
 }
 
-async function getDayOfDriverCtrl({user}:RequestUser, res: Response) {
+async function getDayOfDriverCtrl({user, query}:RequestUser, res: Response) {
     try {
-        const response = await getDayOfDriver(user);
+        const response = await getDayOfDriver(user, query);
         res.status(200).json({
             data: response,
             ok: true,
