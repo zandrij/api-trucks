@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { schemaValidator } from "../middleware/schemaValidator";
 import { checkJwt } from "../middleware/session";
-import { createTruckCtrl, getTruckCtrl, getTrucksCtrl, updateTruckCtrl } from "../controllers/trucks";
+import { createTruckCtrl, deleteLogicTrucksCtrl, getTruckCtrl, getTrucksCtrl, updateTruckCtrl } from "../controllers/trucks";
 import { createTruckSchema, getTruckSchema, updateTruckSchema } from "../schemas/truck.schema";
 import { getDaysSchema } from "../schemas/day.schema";
+import { deleteUserSchema } from "../schemas/user.schema";
 
 const router = Router();
 
@@ -12,4 +13,5 @@ router.get('/:id', checkJwt, schemaValidator(getTruckSchema), getTruckCtrl);
 router.post('/create', checkJwt, schemaValidator(createTruckSchema), createTruckCtrl);
 // router.put('/change-status/:id', checkJwt, schemaValidator(updateDayStatuschema), updateDayStatusCtrl);
 router.put('/:id', checkJwt, schemaValidator(updateTruckSchema), updateTruckCtrl);
+router.delete('/:id', checkJwt, schemaValidator(deleteUserSchema), deleteLogicTrucksCtrl);
 export {router};

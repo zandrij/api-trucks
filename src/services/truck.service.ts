@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import { GlobalError } from "../constants/global_errors";
 import Truck from "../models/truck.model";
 
@@ -9,6 +10,7 @@ async function getTrucks({limit, page}: any, type: string) {
         limit,
         offset,
         order: [['id', 'DESC']],
+        where: {status: {[Op.ne]: 'deleted'}}
     });
     return {total: count, rows, limit, page};
     // return {limit, offset, page}
@@ -38,9 +40,20 @@ async function updateTruck(id:number, data: any, type: string) {
     return truck.toJSON();
 }
 
+// eliminar camiones
+async function logicDeleteTrucks(id:number, type: string) {
+    if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
+    const truck = await Truck.findByPk(id);
+    if(!truck) return GlobalError.NOT_FOUND_DATA;
+    truck.update({status: 'deleted'})
+    // day.update({status});
+    return truck.toJSON();
+}
+
 export {
     getTrucks,
     getTruck,
     createTruck,
-    updateTruck
+    updateTruck,
+    logicDeleteTrucks
 }
