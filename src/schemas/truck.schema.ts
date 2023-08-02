@@ -32,7 +32,7 @@ const updateTruckSchema = z.object({
         model: z.string().trim().optional(),
         serial: z.string().trim().optional(),
         lts: z.number().min(1).optional(),
-        status: z.enum(['avaible', 'disabled', 'working']).optional()
+        status: z.enum(['avaible', 'disabled', 'working', 'deleted']).optional()
     }),
     params: z.object({
         id: z.string().nonempty().transform((val, ctx) => {

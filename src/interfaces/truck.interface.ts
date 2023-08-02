@@ -12,7 +12,7 @@ export interface TruckAttributes {
     model: string;
     serial: string;
     lts: number;
-    status: 'avaible' | 'disabled' | 'working';
+    status: 'avaible' | 'disabled' | 'working' | 'deleted';
     createAt?: Date;
     updateAt?: Date;
 

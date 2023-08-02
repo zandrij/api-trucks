@@ -11,7 +11,7 @@ class Truck extends Model<TruckAttributes, TruckInput> implements TruckAttribute
     model!: string;
     serial!: string;
     lts!: number;
-    status!:'avaible' | 'disabled' | 'working';
+    status!:'avaible' | 'disabled' | 'working' | 'deleted';
 
     public readonly createdAt!: Date;
     public readonly updateAt!: Date;
@@ -40,7 +40,7 @@ Truck.init({
     },
     status: {
         type: DataTypes.ENUM,
-        values: ['avaible', 'disabled', 'working']
+        values: ['avaible', 'disabled', 'working', 'deleted']
         
     },
 }, {
