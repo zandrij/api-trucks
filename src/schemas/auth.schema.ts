@@ -19,6 +19,15 @@ const registerOwnerSchema = z.object({
     })
 });
 
+
+// cambiar contraseña
+const changeUserPasswordSchema = z.object({
+    body: z.object({
+        password: z.string().trim().min(6, {message: "Contraseña es muy corta"}),
+        newPassword: z.string().trim().min(6, {message: "Contraseña es muy corta"}),
+    })
+});
+
 const registerDriveSchema = z.object({
     body: z.object({
         name: z.string().trim().nonempty(),
@@ -74,5 +83,6 @@ export {
     registerOwnerSchema,
     registerDriveSchema,
     loginSchema,
-    registerCustomerSchema
+    registerCustomerSchema,
+    changeUserPasswordSchema
 }

@@ -77,9 +77,20 @@ async function registerOwner(data: UserInput) {
 
 }
 
+async function changePasswordUser({id}:any, {password, newPassword}: any) {
+    const user = await User.findByPk(id);
+    if(!user) throw GlobalError.NOT_FOUND_DATA;
+    const isCorrect = await verified(password, user.password);
+    if (!isCorrect) throw GlobalError.ERROR_VALIDATION;
+    const pass = await encrypt(newPassword);
+    user.update({password: pass});
+    return null;
+}
+
 export {
     registerOwner,
     registerDrive,
     login,
-    registerCustomer
+    registerCustomer,
+    changePasswordUser
 }
