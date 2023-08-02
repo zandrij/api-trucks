@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle";
-import { login, registerCustomer, registerDrive, registerOwner } from "../services/auth.service";
+import { changePasswordUser, login, registerCustomer, registerDrive, registerOwner } from "../services/auth.service";
 import { RequestUser } from "../interfaces/users";
 
 async function loginCtrl(req: Request, res: Response) {
@@ -40,9 +40,19 @@ async function registerDriveCrtl({body, user}: RequestUser, res: Response) {
     }
 }
 
+async function changePasswordUserCtrl({body, user}: RequestUser, res: Response) {
+    try {
+        const response = await changePasswordUser(user, body);
+        res.status(200).json({data: response, message: "actualizado con exito", ok: true});
+    } catch (error) {
+        handleHttp(res, "INTERNAL_SERVER_ERROR", error);
+    }
+}
+
 export {
     registerOwnerCrtl,
     registerDriveCrtl,
     loginCtrl,
-    registerCustomerCrtl
+    registerCustomerCrtl,
+    changePasswordUserCtrl
 }
