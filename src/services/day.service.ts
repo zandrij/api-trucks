@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import { GlobalError } from "../constants/global_errors";
 import Path from "../models/Path";
 import Day from "../models/day.model";
@@ -98,9 +99,15 @@ async function finallyDay(type: string, dateEnd: any,  id: number) {
     return day.toJSON();
 }
 
-async function getDayOfDriver({type, id}: any) {
+async function getDayOfDriver({type, id}: any, {limit, page}:any) {
     if(type === 'customer') return GlobalError.NOT_PERMITED_ACCESS;
-    const day = await Day.findOne({where: {iddrive: id}, order: [['id', "DESC"]],         include: [
+    const offset = page === 1 ? 0 : Math.floor((limit * page) - limit);
+    const {rows, count} = await Day.findAndCountAll({
+        limit,
+        offset,
+        where: {iddrive: id, status: {[Op.in]: ['wait', 'charging']}}, 
+        order: [['id', "DESC"]],         
+        include: [
         {
             model: Path,
             attributes: ['name', 'id']
@@ -110,8 +117,9 @@ async function getDayOfDriver({type, id}: any) {
             attributes: ['color', 'model', 'serial', 'lts', 'status']
         }
     ]});
-    if(!day) return GlobalError.NOT_FOUND_DATA;
-    return day.toJSON();
+    return {total: count, rows, limit, page};
+    // if(!day) return GlobalError.NOT_FOUND_DATA;
+    // return day.toJSON();
 }
 
 

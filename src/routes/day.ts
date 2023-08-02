@@ -7,7 +7,7 @@ import { createDaySchema, getDaysSchema, updateDayRouteschema, updateDayStatusch
 const router = Router();
 
 router.get('/', checkJwt, schemaValidator(getDaysSchema), getDaysCtrl);
-router.get('/drive', checkJwt, getDayOfDriverCtrl);
+router.get('/drive', checkJwt, schemaValidator(getDaysSchema), getDayOfDriverCtrl);
 router.post('/create', checkJwt, schemaValidator(createDaySchema), createDayCtrl);
 router.put('/change-status/:id', checkJwt, schemaValidator(updateDayStatuschema), updateDayStatusCtrl);
 router.put('/end/:id', checkJwt, schemaValidator(updateFinallyDaySchema), finallyDayCtrl);
