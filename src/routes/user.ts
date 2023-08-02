@@ -8,7 +8,7 @@ const router = Router();
 
 router.get('/', checkJwt, schemaValidator(getUsersSchema), getUsersCtrl);
 router.get('/:id', checkJwt, schemaValidator(getUserSchema), getUserIdCrtl);
-router.get('/imei/:device', checkJwt, schemaValidator(getUserImeiSchema), getUserImeiCrtl);
+router.get('/imei/:device', schemaValidator(getUserImeiSchema), getUserImeiCrtl);
 router.delete('/:id', checkJwt, schemaValidator(deleteUserSchema), deleteLoginUserCtrl);
 router.put('/edit/:id', checkJwt, schemaValidator(updateUserSchema), updateUserCtrl);
 export {router};
