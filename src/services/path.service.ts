@@ -12,6 +12,7 @@ async function getPaths({limit, page}: any) {
         limit,
         offset,
         // subQuery: false,
+        where: {status: {[Op.eq]: 'active'}},
         order: [['id', 'DESC']],
     });
     // const user = await User.findByPk(3);
@@ -90,6 +91,16 @@ async function updatePath(id:number, data: any, type: string) {
     return path.toJSON();
 }
 
+// eliminar camiones
+async function logicDeletePath(id:number, type: string) {
+    if(type !== 'owner') throw GlobalError.NOT_PERMITED_ACCESS;
+    const path = await Path.findByPk(id);
+    if(!path) throw GlobalError.NOT_FOUND_DATA;
+    path.update({status: 'deleted'})
+    // day.update({status});
+    return path.toJSON();
+}
+
 // async function getOnePathWithUsers(id: number, type: string) {
 //     const path = await Path.findByPk(id);
 //     if(!path) throw GlobalError.NOT_FOUND_DATA;
@@ -103,5 +114,6 @@ export {
     // removeUserToPath,
     updatePath,
     // getOnePathWithUsers,
-    getOnePath
+    getOnePath,
+    logicDeletePath
 }

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle";
-import { changePasswordUser, login, registerCustomer, registerDrive, registerOwner } from "../services/auth.service";
+import { changePasswordUser, login, lostPassword, registerCustomer, registerDrive, registerOwner } from "../services/auth.service";
 import { RequestUser } from "../interfaces/users";
 
 async function loginCtrl(req: Request, res: Response) {
@@ -49,10 +49,20 @@ async function changePasswordUserCtrl({body, user}: RequestUser, res: Response) 
     }
 }
 
+async function recoverPasswordCtrl({body}: Request, res: Response) {
+    try {
+        const response = await lostPassword(body);
+        res.status(200).json({data: response, message: "Se envio un email a tu bandeja", ok: true});
+    } catch (error) {
+        handleHttp(res, "INTERNAL_SERVER_ERROR", error);
+    }
+}
+
 export {
     registerOwnerCrtl,
     registerDriveCrtl,
     loginCtrl,
     registerCustomerCrtl,
-    changePasswordUserCtrl
+    changePasswordUserCtrl,
+    recoverPasswordCtrl
 }

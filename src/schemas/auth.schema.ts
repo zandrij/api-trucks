@@ -79,10 +79,17 @@ const loginSchema = z.object({
     })
 });
 
+const recoverPasswordSchema = z.object({
+    body: z.object({
+        email: z.string().email().min(8).trim().nonempty(),
+    })
+});
+
 export {
     registerOwnerSchema,
     registerDriveSchema,
     loginSchema,
     registerCustomerSchema,
-    changeUserPasswordSchema
+    changeUserPasswordSchema,
+    recoverPasswordSchema
 }
