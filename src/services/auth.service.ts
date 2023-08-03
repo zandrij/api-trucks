@@ -1,11 +1,13 @@
 import { Op } from "sequelize";
 import { AuthError } from "../constants/auth_errors";
-import { UserAttributes, UserInput } from "../interfaces/users";
+import { UserInput } from "../interfaces/users";
 import User from "../models/user";
 import { encrypt, verified } from "../utils/bcrypt.handle";
 import { generateToken } from "../utils/jwt.handle";
 import { GlobalError } from "../constants/global_errors";
-import { columnsUser } from "../constants/columns";
+import nodemailer from "nodemailer";
+import { account } from "../constants/email";
+import { v4 as uuidv4 } from 'uuid';
 
 interface AuthLogin {
     user: string;
@@ -87,10 +89,42 @@ async function changePasswordUser({id}:any, {password, newPassword}: any) {
     return null;
 }
 
+async function lostPassword({email}:any) {
+        const transporter = nodemailer.createTransport({
+            host: account.host,
+            port: account.port,
+            secure: account.secure,
+            auth: {
+                user: account.user,
+                pass: account.pass
+            }
+        });
+        try {
+            const password: string = uuidv4();
+            await transporter.sendMail({
+                from: account.user, // sender address
+                to: email, // list of receivers
+                subject: "Recuperar contraseña", // Subject line
+                text: `Tu contraseña temporal es: ${password}`, // plain text body
+            })
+            // console.log(info.messageId)
+            // console.log(nodemailer.getTestMessageUrl(info))
+            // return {id: info.messageId};
+            const user = await User.findOne({ where: { email: { [Op.eq]: email } } });
+            if(!user) throw GlobalError.NOT_FOUND_DATA;
+            const pass = await encrypt(password);
+            user.update({password: pass});
+            return null;
+        } catch (error) {
+            throw error;
+        }
+}
+
 export {
     registerOwner,
     registerDrive,
     login,
     registerCustomer,
-    changePasswordUser
+    changePasswordUser,
+    lostPassword
 }
