@@ -70,6 +70,7 @@ async function deleteLogicTrucksCtrl({params, user}:RequestUser, res: Response) 
     }
 }
 
+
 export {
     getTrucksCtrl,
     getTruckCtrl,
