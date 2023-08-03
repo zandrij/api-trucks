@@ -93,7 +93,7 @@ async function lostPassword({email}:any) {
         const transporter = nodemailer.createTransport({
             host: account.host,
             port: account.port,
-            secure: account.secure,
+            // secure: account.secure,
             auth: {
                 user: account.user,
                 pass: account.pass
