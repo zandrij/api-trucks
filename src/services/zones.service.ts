@@ -26,7 +26,7 @@ async function getZone(id:number) {
 
 async function createZone(data:any, type: string) {
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
-    const pat = await Path.create({name: data.name});
+    const pat = await Path.create({name: data.name, status: 'active'});
     const zonesResult = data.zones.map((e: ZonesAttributes) => ({...e, idpath: pat.id}))
     const zones = await Zones.bulkCreate(zonesResult);
     return {...pat.toJSON(), zones};
