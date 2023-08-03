@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createOnlyPath, getOnePath, getPaths, updatePath } from "../services/path.service";
+import { createOnlyPath, getOnePath, getPaths, logicDeletePath, updatePath } from "../services/path.service";
 import { handleHttp } from "../utils/error.handle";
 import { RequestUser } from "../interfaces/users";
 
@@ -102,6 +102,19 @@ async function updatePathCtrl({params, user, body}:RequestUser, res: Response) {
 //     }
 // }
 
+/** eliminar un usuario */
+async function deleteLogicPathCtrl({params, user}:RequestUser, res: Response) {
+    try {
+        const response = await logicDeletePath(params.id as unknown as number, `${user?.type}`);
+        res.status(200).json({
+            data: response,
+            ok: true,
+            message: "Eliminado exitosamente"
+        });
+    } catch (error) {
+        handleHttp(res, "INTERNAL_SERVER_ERROR", error);
+    }
+}
 
 
 export {
@@ -111,5 +124,6 @@ export {
     // removeUserToPathCtrl,
     updatePathCtrl,
     // getOnePathWithUsersCtrl,
-    getOnePathCtrl
+    getOnePathCtrl,
+    deleteLogicPathCtrl
 }
