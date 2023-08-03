@@ -1,10 +1,6 @@
-import {Op, Sequelize} from 'sequelize';
+import {Op} from 'sequelize';
 import { GlobalError } from "../constants/global_errors";
 import Path from "../models/Path";
-import User from "../models/user";
-import { PathUserAttributes } from "../interfaces/pathuser.interface";
-import { columnsUser } from "../constants/columns";
-import Day from "../models/day.model";
 
 async function getPaths({limit, page}: any) {
     const offset = page === 1 ? 0 : Math.floor((limit * page) - limit);
@@ -44,7 +40,7 @@ async function getOnePath(id:number) {
 
 async function createOnlyPath(data:any, type: string) {
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
-    const ph = await Path.create(data);
+    const ph = await Path.create({...data, status: 'active'});
     return ph.toJSON();
 }
 
