@@ -7,9 +7,9 @@ export interface AccountMail {
 }
 
 export const account: AccountMail = {
-    host: <string>process.env.HOST,
-    port: process.env.PORT as unknown as number,
-    secure: process.env.SECURE as unknown as boolean,
-    user: <string>process.env.USER,
-    pass: <string>process.env.PASS
+    host: <string>process.env.HOST || '',
+    port: process.env.PORTSMTP as unknown as number || 465,
+    secure: process.env.SECURE as unknown as boolean || true,
+    user: <string>process.env.USER || '',
+    pass: <string>process.env.PASS || ''
 }
