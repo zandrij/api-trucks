@@ -69,6 +69,10 @@ async function getUserImeiCrtl({params}:RequestUser, res: Response) {
                 ok: true,
             });
         }
+        res.status(200).json({
+            data: 'dispositivo no reconocido',
+            ok: true
+        })
     } catch (error) {
         handleHttp(res, "INTERNAL_SERVER_ERROR", error);
     }
