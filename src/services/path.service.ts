@@ -41,6 +41,7 @@ async function getOnePath(id:number) {
 async function createOnlyPath(data:any, type: string) {
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
     const ph = await Path.create({...data, status: 'active'});
+    if(!ph) return GlobalError.NOT_FOUND_DATA;
     return ph.toJSON();
 }
 
