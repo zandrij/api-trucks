@@ -3,8 +3,7 @@ import { Response } from "express";
 import {ZodError} from 'zod'
 
 const handleHttp = (res:Response, error: string, errorRaw?: any) => {
-    console.log(errorRaw)
-    res.status(500).json({
+    return res.status(500).json({
         error,
         ok: false,
         // message: errorRaw,

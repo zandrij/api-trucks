@@ -14,7 +14,7 @@ async function createDayCtrl({body, user}:RequestUser, res: Response) {
                 message: "Noy clientes en esta ruta"
             });
         }
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
             message: "agregado exitosamente"
@@ -27,7 +27,7 @@ async function createDayCtrl({body, user}:RequestUser, res: Response) {
 async function getDayOfDriverCtrl({user, query}:RequestUser, res: Response) {
     try {
         const response = await getDayOfDriver(user, query);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
             message: "agregado exitosamente"
@@ -41,7 +41,7 @@ async function getDayOfDriverCtrl({user, query}:RequestUser, res: Response) {
 async function updateDayStatusCtrl({params, user, body}:RequestUser, res: Response) {
     try {
         const response = await updateDayStatus(params.id as unknown as number, body.status, `${user?.type}`);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
             message: "actualizado exitosamente"
@@ -55,7 +55,7 @@ async function updateDayStatusCtrl({params, user, body}:RequestUser, res: Respon
 async function finallyDayCtrl({params, user, body}:RequestUser, res: Response) {
     try {
         const response = await finallyDay(`${user?.type}`, body.dateEnd, params.id as unknown as number, );
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
             message: "actualizado exitosamente"
@@ -68,7 +68,7 @@ async function finallyDayCtrl({params, user, body}:RequestUser, res: Response) {
 async function updateDayRouteCtrl({params, user, body}:RequestUser, res: Response) {
     try {
         const response = await updateDayRoute(params.id as unknown as number, body, `${user?.type}`);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
             message: "actualizado exitosamente"
@@ -82,7 +82,7 @@ async function updateDayRouteCtrl({params, user, body}:RequestUser, res: Respons
 async function getDaysCtrl({query, user}:RequestUser, res: Response) {
     try {
         const response = await getDays(query, `${user?.type}`);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
         });

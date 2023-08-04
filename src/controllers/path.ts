@@ -7,7 +7,7 @@ import { RequestUser } from "../interfaces/users";
 async function getPathCtrl(req:Request, res: Response) {
     try {
         const response = await getPaths(req.query);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
             message: "agregado exitosamente"
@@ -21,7 +21,7 @@ async function getPathCtrl(req:Request, res: Response) {
 async function getOnePathCtrl(req: Request, res: Response) {
     try {
         const response = await getOnePath(req.params.id as unknown as number);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
         });
@@ -35,7 +35,7 @@ async function getOnePathCtrl(req: Request, res: Response) {
 async function createOnlyPathCtrl({body, user}:RequestUser, res: Response) {
     try {
         const response = await createOnlyPath(body, `${user?.type}`);
-        res.status(200).json({
+        return res.status(200).json({
             response,
             ok: true,
             // message: "agregado exitosamente"
@@ -78,7 +78,7 @@ async function createOnlyPathCtrl({body, user}:RequestUser, res: Response) {
 async function updatePathCtrl({params, user, body}:RequestUser, res: Response) {
     try {
         const response = await updatePath(params.id as unknown as number, body, `${user?.type}`);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
             message: "actualizado exitosamente"
@@ -106,7 +106,7 @@ async function updatePathCtrl({params, user, body}:RequestUser, res: Response) {
 async function deleteLogicPathCtrl({params, user}:RequestUser, res: Response) {
     try {
         const response = await logicDeletePath(params.id as unknown as number, `${user?.type}`);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
             message: "Eliminado exitosamente"

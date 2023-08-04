@@ -6,7 +6,7 @@ import { createTruck, getTruck, getTrucks, logicDeleteTrucks, updateTruck } from
 async function createTruckCtrl({body, user}:RequestUser, res: Response) {
     try {
         const response = await createTruck(body, `${user?.type}`);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
             message: typeof response === 'string' ? "Error al agregar" : "agregado exitosamente"
@@ -19,7 +19,7 @@ async function createTruckCtrl({body, user}:RequestUser, res: Response) {
 async function getTruckCtrl({params, user}:RequestUser, res: Response) {
     try {
         const response = await getTruck({type: `${user?.type}`, id: params.id as unknown as number});
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
             message: ""
@@ -33,7 +33,7 @@ async function getTruckCtrl({params, user}:RequestUser, res: Response) {
 async function updateTruckCtrl({params, user, body}:RequestUser, res: Response) {
     try {
         const response = await updateTruck(params.id as unknown as number, body, `${user?.type}`);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
             message: "actualizado exitosamente"
@@ -47,7 +47,7 @@ async function updateTruckCtrl({params, user, body}:RequestUser, res: Response) 
 async function getTrucksCtrl({query, user}:RequestUser, res: Response) {
     try {
         const response = await getTrucks(query, `${user?.type}`);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
         });
@@ -60,7 +60,7 @@ async function getTrucksCtrl({query, user}:RequestUser, res: Response) {
 async function deleteLogicTrucksCtrl({params, user}:RequestUser, res: Response) {
     try {
         const response = await logicDeleteTrucks(params.id as unknown as number, `${user?.type}`);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
             message: "Eliminado exitosamente"

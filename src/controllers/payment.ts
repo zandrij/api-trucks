@@ -8,7 +8,7 @@ import { Storage } from "../interfaces/storage.interface";
 async function getPaymentsCtrl({query, user}:RequestUser, res: Response) {
     try {
         const response = await getPayments(query, `${user?.type}`);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
         });
@@ -21,7 +21,7 @@ async function getPaymentsCtrl({query, user}:RequestUser, res: Response) {
 async function updatePaymentStatusCtrl({params, user, body}:RequestUser, res: Response) {
     try {
         const response = await updatePaymentStatus(params.id as unknown as number, body.status, body.amount, `${user?.type}`);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
             message: "actualizado exitosamente"
@@ -45,7 +45,7 @@ const uploadPaidCtrl = async (req: RequestUser, res: Response) => {
             amount: body.amount
         }
         const response = await paidPayment(params.id as unknown as number, dataToRegister)
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
             message: "actualizado exitosamente"
