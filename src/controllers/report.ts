@@ -8,7 +8,7 @@ import { generateExcelReport } from "../services/excel.service";
 async function getCustomerBuyCtrl({user, query}:RequestUser, res: Response) {
     try {
         const response = await getCustomerBuyTotal(query, `${user?.type}`);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
             // message: "agregado exitosamente"
@@ -21,7 +21,7 @@ async function getCustomerBuyCtrl({user, query}:RequestUser, res: Response) {
 async function getPathWithDaysCtrl({user, query}:RequestUser, res: Response) {
     try {
         const response = await getPathWithDays(query, `${user?.type}`);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
             // message: "agregado exitosamente"
@@ -34,7 +34,7 @@ async function getPathWithDaysCtrl({user, query}:RequestUser, res: Response) {
 async function getDriverDayEndCtrl({user, query}:RequestUser, res: Response) {
     try {
         const response = await getDriverDayEnd(query, `${user?.type}`);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
             // message: "agregado exitosamente"
@@ -47,7 +47,7 @@ async function getDriverDayEndCtrl({user, query}:RequestUser, res: Response) {
 async function generateExcelReportCtrl({user, query}:RequestUser, res: Response) {
     try {
         const response = await generateExcelReport(query, `${user?.type}`);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
             // message: "agregado exitosamente"
