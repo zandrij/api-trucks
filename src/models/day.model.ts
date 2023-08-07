@@ -60,7 +60,7 @@ Day.init({
     },
     status: {
         type: DataTypes.ENUM,
-        values: ['wait', 'charging', 'dispatching', 'end']
+        values: ['wait', 'charging', 'dispatching', 'end', "null"]
         
     },
 }, {

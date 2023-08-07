@@ -7,7 +7,7 @@ import { RequestUser } from "../interfaces/users";
 async function getZonesCtrl(req:Request, res: Response) {
     try {
         const response = await getZones(req.query);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
             message: "agregado exitosamente"
@@ -21,7 +21,7 @@ async function getZonesCtrl(req:Request, res: Response) {
 async function createZoneCtrl({body, user}:RequestUser, res: Response) {
     try {
         const response = await createZone(body, `${user?.type}`);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
             message: "agregado exitosamente"
@@ -35,7 +35,7 @@ async function createZoneCtrl({body, user}:RequestUser, res: Response) {
 async function createOnlyZoneCtrl({body, user}:RequestUser, res: Response) {
     try {
         const response = await createOnlyZone(body, `${user?.type}`);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
             message: "agregado exitosamente"
@@ -49,7 +49,7 @@ async function createOnlyZoneCtrl({body, user}:RequestUser, res: Response) {
 async function deleteOneZoneCtrl({params, user}:RequestUser, res: Response) {
     try {
         const response = await DeleteOneZone(params.id as unknown as number, `${user?.type}`);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
             message: "Eliminado exitosamente"
@@ -63,7 +63,7 @@ async function deleteOneZoneCtrl({params, user}:RequestUser, res: Response) {
 async function updateOneZoneCtrl({params, user, body}:RequestUser, res: Response) {
     try {
         const response = await updateOneZone(params.id as unknown as number, body, `${user?.type}`);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
             message: "actualizado exitosamente"
@@ -78,7 +78,7 @@ async function updateOneZoneCtrl({params, user, body}:RequestUser, res: Response
 async function getOneZoneCtrl({params}:RequestUser, res: Response) {
     try {
         const response = await getZone(params.id as unknown as number);
-        res.status(200).json({
+        return res.status(200).json({
             data: response,
             ok: true,
         });
@@ -86,6 +86,7 @@ async function getOneZoneCtrl({params}:RequestUser, res: Response) {
         handleHttp(res, "INTERNAL_SERVER_ERROR", error);
     }
 }
+
 
 export {
     createZoneCtrl,

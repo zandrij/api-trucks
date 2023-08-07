@@ -89,7 +89,7 @@ const getUserSchema = z.object({
 
 const getUserImeiSchema = z.object({
     params: z.object({
-        device: z.string().trim().nonempty()
+        device: z.string()
     })
 });
 
