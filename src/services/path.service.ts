@@ -2,18 +2,30 @@ import {Op} from 'sequelize';
 import { GlobalError } from "../constants/global_errors";
 import Path from "../models/Path";
 
-async function getPaths({limit, page}: any) {
+async function getPaths({limit, page, name, all}: any) {
+    let filter: any = {status: {[Op.eq]: 'active'}};
+    if(name) filter.name = {[Op.like]: `%${name}%`};
+
+    if(all) {
+        const rows = await Path.findAll({
+            where: filter,
+            order: [['id', 'DESC']],
+        });
+        // const user = await User.findByPk(3);
+        // rows[0].addUser(user as User);
+        return rows;
+    }
     const offset = page === 1 ? 0 : Math.floor((limit * page) - limit);
-    const rows = await Path.findAll({
+    const {count, rows} = await Path.findAndCountAll({
         limit,
         offset,
         // subQuery: false,
-        where: {status: {[Op.eq]: 'active'}},
+        where: filter,
         order: [['id', 'DESC']],
     });
     // const user = await User.findByPk(3);
     // rows[0].addUser(user as User);
-    return {total: 0, rows, limit, page}
+    return {total: count, rows, limit, page}
     // return {total: count.length, rows, limit, page};
 
 
