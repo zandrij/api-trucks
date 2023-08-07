@@ -49,4 +49,37 @@ const updateTruckSchema = z.object({
     })
 });
 
-export {createTruckSchema, updateTruckSchema, getTruckSchema}
+/** obtener paths */
+const getTrucksSchema = z.object({
+    query: z.object({
+        limit: z.string().transform((val, ctx) => {
+            const result = parseInt(val);
+            if (isNaN(result)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "id no es un numero"
+                });
+                return z.NEVER;
+            }
+            return result;
+        }).default('2'),
+        page: z.string().transform((val, ctx) => {
+            const result = parseInt(val);
+            if (isNaN(result)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "id no es un numero"
+                });
+                return z.NEVER;
+            }
+            return result;
+        }).default('1'),
+        model: z.string().optional(),
+        serial: z.string().optional()
+        // path: z.string().optional().transform((val) => {
+        //     return (val === 'true')
+        // })
+    }),
+});
+
+export {createTruckSchema, getTrucksSchema, updateTruckSchema, getTruckSchema}

@@ -3,14 +3,17 @@ import { GlobalError } from "../constants/global_errors";
 import Truck from "../models/truck.model";
 
 // obtener lista de camiones
-async function getTrucks({limit, page}: any, type: string) {
+async function getTrucks({limit, page, model, serial}: any, type: string) {
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
     const offset = page === 1 ? 0 : Math.floor((limit * page) - limit);
+    let filter: any = {status: {[Op.ne]: 'deleted'}};
+    if(model) filter.model = {[Op.like]: `%${model}%`};
+    if(serial) filter.serial = {[Op.like]: `%${serial}%`}
     const {count, rows} = await Truck.findAndCountAll({
         limit,
         offset,
         order: [['id', 'DESC']],
-        where: {status: {[Op.ne]: 'deleted'}}
+        where: filter
     });
     return {total: count, rows, limit, page};
     // return {limit, offset, page}
