@@ -95,6 +95,10 @@ const getDaysSchema = z.object({
             }
             return result;
         }).default('1'),
+        drive: z.string().optional(),
+        customer: z.string().optional(),
+        status: z.enum(['wait', 'charging', 'dispatching', 'end', 'null']),
+        path: z.string().optional()
         // path: z.string().optional().transform((val) => {
         //     return (val === 'true')
         // })

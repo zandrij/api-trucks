@@ -13,7 +13,7 @@ const cofigEnv = {
 // const cofigEnv = {
 //     database: 'trucks',
 //     username: 'root',
-//     password: '',
+//     password: 'secret',
 //     host: 'localhost',
 //     port: 3306,
 //     dialect: process.env.DIALECT as Dialect

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { boolean, z } from "zod";
 
 /** crear un path */
 const createOnlyPathSchema = z.object({
@@ -14,6 +14,7 @@ const createOnlyPathSchema = z.object({
 //         userId: z.number().min(1).nonnegative(),
 //     })
 // });
+
 
 /** obtener paths */
 const getPathsSchema = z.object({
@@ -40,6 +41,12 @@ const getPathsSchema = z.object({
             }
             return result;
         }).default('1'),
+        name: z.string().optional(),
+        all: z.string().refine((data) => {
+            return data === 'true' || data === 'false';
+          }, {
+            message: 'El valor debe ser "true" o "false"',
+          }).transform(data => data === 'true').default('false')
         // customers: z.string().optional().transform((val) => {
         //     return (val === 'true')
         // })
@@ -113,6 +120,7 @@ const getOnePathSchema = z.object({
         }),
     })
 });
+
 
 export {
     createOnlyPathSchema,
