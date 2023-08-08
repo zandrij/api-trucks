@@ -8,27 +8,29 @@ import { columnsUser } from "../constants/columns";
 import Path from "../models/Path";
 import Truck from "../models/truck.model";
 
-async function getPayments({limit, page, day, path, user, status, start, end}: any, type: string) {
+async function getPayments({limit, page, day, path, user, status, start, end, customer}: any, type: string) {
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
     const offset = page === 1 ? 0 : Math.floor((limit * page) - limit);
-    const filters ={
-      day: day === 0 ? {} : {idday: {[Op.eq]: day}},
-      path: path === 0 ? undefined : {idpath: {[Op.eq]: path}},
-      user: user === 0 ? {} : {iduser: {[Op.eq]: user}},
-      status: !status ? {} : {status: {[Op.eq]: status}},
-      dates: !start || !end ? {} : {createdAt: {[Op.between]: [start, end]}}
-    }
+    let filter: any = {};
+    if(day) filter.idday = {[Op.eq]: day}
+    // if(path) filter.idpath = {[Op.eq]: path}
+    if(user) filter.iduser = {[Op.eq]: user}
+    if(status) filter.status = {[Op.eq]: status}
+    if(start && end) filter.createdAt = {[Op.between]: [start, end]}
+    // if(customer) filter.name = {[Op.like]: `%${customer}%`}
+    // const filters ={
+    //   day: day === 0 ? {} : {idday: {[Op.eq]: day}},
+    //   path: path === 0 ? undefined : {idpath: {[Op.eq]: path}},
+    //   user: user === 0 ? {} : {iduser: {[Op.eq]: user}},
+    //   status: !status ? {} : {status: {[Op.eq]: status}},
+    //   dates: !start || !end ? {} : {createdAt: }
+    // }
     const { count, rows } = await Payment.findAndCountAll({
       limit,
       offset,
       subQuery: false,
       order: [["id", "DESC"]],
-      where: {
-        ...filters.day,
-        ...filters.user,
-        ...filters.status,
-        ...filters.dates,
-      },
+      where: filter,
       attributes: [
         'id',
         'idday',
@@ -46,12 +48,13 @@ async function getPayments({limit, page, day, path, user, status, start, end}: a
           // subQuery: false,
           model: User,
           attributes: columnsUser,
+          where: customer ? {name: {[Op.like]: `%${customer}%`}} : undefined,
           as: 'client'
         },
         {
           subQuery: false,
           model: Day,
-          where: filters.path,
+          where: path ? {idpath: {[Op.eq]: path}} : undefined,
           attributes: [
             "iddrive",
             "idtruck",

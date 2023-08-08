@@ -61,6 +61,7 @@ const getPaymentSchema = z.object({
         status: z.string().trim().optional(),
         start: z.string().trim().optional(),
         end: z.string().trim().optional(),
+        customer: z.string().optional(),
         // path: z.string().optional().transform((val) => {
         //     return (val === 'true')
         // })
