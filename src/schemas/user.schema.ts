@@ -50,7 +50,8 @@ const getUsersSchema = z.object({
             }
             return result;
         }).default('1'),
-        typeUser: z.string().optional() // 'owner' | 'customer' | 'drive'
+        typeUser: z.string().optional(), // 'owner' | 'customer' | 'drive'
+        name: z.string().optional() 
     }),
 });
 

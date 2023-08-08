@@ -6,19 +6,23 @@ import Day from "../models/day.model";
 import Payment from "../models/payment.model";
 
 // obtener usuarios [todos o por tipo]
-async function getUsers({limit, page, typeUser}: any, type: string) {
+async function getUsers({limit, page, typeUser, name}: any, type: string) {
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
     const offset = page === 1 ? 0 : Math.floor((limit * page) - limit);
     const isDive = typeUser === 'drive';
+    let filter: any = {status: {[Op.eq]: 'active'}};
+    if(typeUser) filter.type = {[Op.eq]: typeUser}
+    if(name) filter.name = {[Op.like]: `%${name}%`}
+    
     if(typeUser === 'customer') {
-        return await getCustomerWithAmount({limit, page, typeUser}, offset);
+        return await getCustomerWithAmount({limit, page, typeUser, name}, offset);
     } else {
     const {rows, count} = await User.findAndCountAll({
         limit,
         offset,
         order: [['id', 'DESC']],
         subQuery: false,
-        where: !typeUser ? {status: {[Op.eq]: 'active'}} : {[Op.and]: [{type: typeUser}, {status: 'active'}]},
+        where: filter,
         include: isDive ? [
             {
                 model: Day,
@@ -64,15 +68,18 @@ async function getUserImei(device:string) {
 }
 
 // funciones privadas
-async function getCustomerWithAmount({limit, page, typeUser}: any, offset: number):Promise<any> {
-    const isCustomer = typeUser === 'customer';
+async function getCustomerWithAmount({limit, page, typeUser, name}: any, offset: number):Promise<any> {
+    // const isCustomer = typeUser === 'customer';
+    let filter: any = {status: {[Op.eq]: 'active'}};
+    if(typeUser) filter.type = {[Op.eq]: typeUser}
+    if(name) filter.name = {[Op.like]: `%${name}%`}
     const {rows, count} = await User.findAndCountAll({
         limit,
         offset,
         order: [['totalAmount', 'DESC']],
         subQuery: false,
 
-        where: !typeUser ? {status: {[Op.eq]: 'active'}} : {[Op.and]: [{type: typeUser}, {status: 'active'}]},
+        where: filter,
         attributes: [
             ...columnsUser, 
             [Sequelize.fn("SUM", Sequelize.col('Payments.amount')), 'totalAmount'],
