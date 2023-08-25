@@ -80,21 +80,28 @@ async function createDay(data:any, type: string) {
 
 async function updateDayStatus(id:number, status: "wait" | "charging" | "dispatching" | "end", type: string) {
     const day = await Day.findByPk(id);
-    if(!day) return GlobalError.NOT_FOUND_DATA;
+    if(!day) throw GlobalError.NOT_FOUND_DATA;
     day.update({status});
     return day.toJSON();
 }
 
-async function updateDayRoute(id:number, data: any, type: string) {
+async function updateDay(data: any, id: number) {
     const day = await Day.findByPk(id);
-    if(!day) return GlobalError.NOT_FOUND_DATA;
-    const routes: RouteDay[] = JSON.parse(day.routes);
-    // console.log(typeof day.routes)
-    
-    day.update({routes: JSON.stringify(routes.map(e => e.id === data.id ? {...e, status: data.status} : e))})
-    // day.update({status});
+    if(!day) throw GlobalError.NOT_FOUND_DATA;
+    day.update(data);
     return day.toJSON();
 }
+
+// async function updateDayRoute(id:number, data: any, type: string) {
+//     const day = await Day.findByPk(id);
+//     if(!day) return GlobalError.NOT_FOUND_DATA;
+//     const routes: RouteDay[] = JSON.parse(day.routes);
+//     // console.log(typeof day.routes)
+    
+//     day.update({routes: JSON.stringify(routes.map(e => e.id === data.id ? {...e, status: data.status} : e))})
+//     // day.update({status});
+//     return day.toJSON();
+// }
 
 async function finallyDay(type: string, dateEnd: any,  id: number) {
     if(type === 'customer') return GlobalError.NOT_PERMITED_ACCESS;
@@ -133,6 +140,7 @@ export {
     finallyDay,
     getDayOfDriver,
     updateDayStatus,
-    updateDayRoute,
+    // updateDayRoute,
+    updateDay,
     getDays
 }

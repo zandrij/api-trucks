@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { RequestUser } from "../interfaces/users";
 import { handleHttp } from "../utils/error.handle";
-import { createDay, finallyDay, getDayOfDriver, getDays, updateDayRoute, updateDayStatus } from "../services/day.service";
+import { createDay, finallyDay, getDayOfDriver, getDays, updateDay, updateDayStatus } from "../services/day.service";
 import { GlobalError } from "../constants/global_errors";
 
 async function createDayCtrl({body, user}:RequestUser, res: Response) {
@@ -52,6 +52,20 @@ async function updateDayStatusCtrl({params, user, body}:RequestUser, res: Respon
 }
 
 /** actualizar el estado de una jornada */
+async function updateDayCtrl({params, body}:Request, res: Response) {
+    try {
+        const response = await updateDay(body, params.id as unknown as number);
+        return res.status(200).json({
+            data: response,
+            ok: true,
+            message: "actualizado exitosamente"
+        });
+    } catch (error) {
+        handleHttp(res, "INTERNAL_SERVER_ERROR", error);
+    }
+}
+
+/** actualizar el estado de una jornada */
 async function finallyDayCtrl({params, user, body}:RequestUser, res: Response) {
     try {
         const response = await finallyDay(`${user?.type}`, body.dateEnd, params.id as unknown as number, );
@@ -65,18 +79,18 @@ async function finallyDayCtrl({params, user, body}:RequestUser, res: Response) {
     }
 }
 
-async function updateDayRouteCtrl({params, user, body}:RequestUser, res: Response) {
-    try {
-        const response = await updateDayRoute(params.id as unknown as number, body, `${user?.type}`);
-        return res.status(200).json({
-            data: response,
-            ok: true,
-            message: "actualizado exitosamente"
-        });
-    } catch (error) {
-        handleHttp(res, "INTERNAL_SERVER_ERROR", error);
-    }
-}
+// async function updateDayRouteCtrl({params, user, body}:RequestUser, res: Response) {
+//     try {
+//         const response = await updateDayRoute(params.id as unknown as number, body, `${user?.type}`);
+//         return res.status(200).json({
+//             data: response,
+//             ok: true,
+//             message: "actualizado exitosamente"
+//         });
+//     } catch (error) {
+//         handleHttp(res, "INTERNAL_SERVER_ERROR", error);
+//     }
+// }
 
 /** get all days */
 async function getDaysCtrl({query, user}:RequestUser, res: Response) {
@@ -96,6 +110,7 @@ export {
     finallyDayCtrl,
     getDayOfDriverCtrl,
     updateDayStatusCtrl,
-    updateDayRouteCtrl,
-    getDaysCtrl
+    // updateDayRouteCtrl,
+    getDaysCtrl,
+    updateDayCtrl
 }

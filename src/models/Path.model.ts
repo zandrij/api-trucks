@@ -8,6 +8,7 @@ import Day from "./day.model";
 class Path extends Model<PathAttributes, PathInput> implements PathAttributes {
     id!: number;
     name!: string;
+    status!: "active" | "deleted";
 
     public readonly createdAt!: Date;
     public readonly updateAt!: Date;
@@ -23,6 +24,10 @@ Path.init({
     name: {
         type: DataTypes.STRING
     },
+    status: {
+        type: DataTypes.ENUM,
+        values: ['active', 'deleted']
+    }
 }, {
     timestamps: true,
     sequelize: sequelize,
