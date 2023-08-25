@@ -50,6 +50,32 @@ const updateDayStatuschema = z.object({
     })
 });
 
+const updateDaySchema = z.object({
+    body: z.object({
+        iddrive: z.number().optional(),
+        idtruck: z.number().optional(),
+        idpath: z.number().optional(),
+        iduser: z.number().optional(),
+        lts: z.number().optional(),
+        dateStart: z.string().optional(),
+        dateEnd: z.string().optional(),
+        status: z.enum(['wait', 'charging', 'dispatching', 'end', 'null']).optional(),
+    }),
+    params: z.object({
+        id: z.string().nonempty().transform((val, ctx) => {
+            const result = parseInt(val);
+            if (isNaN(result)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "id no es un numero"
+                });
+                return z.NEVER;
+            }
+            return result;
+        }),
+    })
+});
+
 const updateDayRouteschema = z.object({
     body: z.object({
         id: z.number().min(1),
@@ -110,5 +136,6 @@ export {
     updateDayStatuschema,
     updateDayRouteschema,
     getDaysSchema,
-    updateFinallyDaySchema
+    updateFinallyDaySchema,
+    updateDaySchema
 }
