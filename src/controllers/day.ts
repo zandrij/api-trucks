@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { RequestUser } from "../interfaces/users";
 import { handleHttp } from "../utils/error.handle";
-import { createDay, finallyDay, getDayOfDriver, getDays, updateDay, updateDayStatus } from "../services/day.service";
+import { createDay, finallyDay, getDayOfDriver, getDays, getOneDay, updateDay, updateDayStatus } from "../services/day.service";
 import { GlobalError } from "../constants/global_errors";
 
 async function createDayCtrl({body, user}:RequestUser, res: Response) {
@@ -105,6 +105,20 @@ async function getDaysCtrl({query, user}:RequestUser, res: Response) {
     }
 }
 
+async function getDayCtrl({params}:Request, res: Response) {
+    try {
+        const response = await getOneDay(params.id as unknown as number);
+        return res.status(200).json({
+            data: response,
+            ok: true,
+            message: ""
+        });
+    } catch (error) {
+        handleHttp(res, "INTERNAL_SERVER_ERROR", error);
+    }
+}
+
+
 export {
     createDayCtrl,
     finallyDayCtrl,
@@ -112,5 +126,6 @@ export {
     updateDayStatusCtrl,
     // updateDayRouteCtrl,
     getDaysCtrl,
+    getDayCtrl,
     updateDayCtrl
 }

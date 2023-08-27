@@ -18,7 +18,7 @@ interface RouteDay {
 async function getDays({limit, page, status, drive, customer, path}: any, type: string) {
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
     const offset = page === 1 ? 0 : Math.floor((limit * page) - limit);
-    
+    console.log(status)
     const {count, rows} = await Day.findAndCountAll({
         limit,
         offset,
@@ -135,6 +135,42 @@ async function getDayOfDriver({type, id}: any, {limit, page}:any) {
 }
 
 
+async function getOneDay(id: number) {
+    const day = await Day.findOne({where: {id: id}, include: [
+        {
+            model: Path,
+            attributes: ['name', 'id']
+        },
+        {
+            model: Truck,
+            attributes: ['color', 'model', 'serial', 'lts', 'status']
+        }
+    ]});
+    if(!day) return GlobalError.NOT_FOUND_DATA;
+    return day.toJSON();
+    // const offset = page === 1 ? 0 : Math.floor((limit * page) - limit);
+    // const {rows, count} = await Day.findAndCountAll({
+    //     limit,
+    //     offset,
+    //     where: {iddrive: id, status: {[Op.in]: ['wait', 'charging']}}, 
+    //     order: [['id', "DESC"]],         
+    //     include: [
+    //     {
+    //         model: Path,
+    //         attributes: ['name', 'id']
+    //     },
+    //     {
+    //         model: Truck,
+    //         attributes: ['color', 'model', 'serial', 'lts', 'status']
+    //     }
+    // ]});
+    // return day?.toJSON();
+    // if(!day) return GlobalError.NOT_FOUND_DATA;
+    // return day.toJSON();
+}
+
+
+
 export {
     createDay,
     finallyDay,
@@ -142,5 +178,6 @@ export {
     updateDayStatus,
     // updateDayRoute,
     updateDay,
+    getOneDay,
     getDays
 }
