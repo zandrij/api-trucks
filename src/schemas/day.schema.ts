@@ -123,12 +123,28 @@ const getDaysSchema = z.object({
         }).default('1'),
         drive: z.string().optional(),
         customer: z.string().optional(),
-        status: z.enum(['wait', 'charging', 'dispatching', 'end', 'null']),
+        status: z.enum(['wait', 'charging', 'dispatching', 'end', 'null']).optional(),
         path: z.string().optional()
         // path: z.string().optional().transform((val) => {
         //     return (val === 'true')
         // })
     }),
+});
+
+const getDaySchema = z.object({
+    params: z.object({
+        id: z.string().nonempty().transform((val, ctx) => {
+            const result = parseInt(val);
+            if (isNaN(result)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "id no es un numero"
+                });
+                return z.NEVER;
+            }
+            return result;
+        }),
+    })
 });
 
 export {
@@ -137,5 +153,6 @@ export {
     updateDayRouteschema,
     getDaysSchema,
     updateFinallyDaySchema,
-    updateDaySchema
+    updateDaySchema,
+    getDaySchema
 }
