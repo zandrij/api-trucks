@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle";
-import { DeleteOneZone, createOnlyZone, createZone, getZone, getZones, updateOneZone } from "../services/zones.service";
+import { DeleteOneZone, createOnlyZone, getZone, getZones, updateOneZone } from "../services/zones.service";
 import { RequestUser } from "../interfaces/users";
 
 /** get all paths */
@@ -20,9 +20,9 @@ async function getZonesCtrl(req:Request, res: Response) {
 /** crear path con multiples zona */
 async function createZoneCtrl({body, user}:RequestUser, res: Response) {
     try {
-        const response = await createZone(body, `${user?.type}`);
+        // const response = await createZone(body, `${user?.type}`);
         return res.status(200).json({
-            data: response,
+            data: [],
             ok: true,
             message: "agregado exitosamente"
         });

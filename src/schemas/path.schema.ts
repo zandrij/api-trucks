@@ -4,6 +4,7 @@ import { boolean, z } from "zod";
 const createOnlyPathSchema = z.object({
     body: z.object({
         name: z.string().min(3).nonempty(),
+        municipioId: z.number().min(1, 'Campo es requerido')
     })
 });
 
@@ -87,7 +88,8 @@ const getPathsSchema = z.object({
 // update path schema validator
 const updatePathSchema = z.object({
     body: z.object({
-        name: z.string().min(3).nonempty(),
+        name: z.string().min(3).optional(),
+        municipioId: z.number().min(1).optional()
     }),
     params: z.object({
         id: z.string().nonempty().transform((val, ctx) => {

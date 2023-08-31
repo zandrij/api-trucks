@@ -76,5 +76,6 @@ Day.belongsTo(User, {foreignKey: 'iduser', as: 'client'})
 Path.hasMany(Day, {foreignKey: 'idpath'})
 User.hasMany(Day, {foreignKey: 'iddrive'})
 // Payment.hasMany(Day, {foreignKey: 'idday'})
+// Day.belongsTo(Payment, {foreignKey: 'idday'})
 
 export default Day;

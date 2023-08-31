@@ -1,6 +1,7 @@
 import {Op} from 'sequelize';
 import { GlobalError } from "../constants/global_errors";
 import Path from "../models/Path";
+import Municipio from '../models/municipio.model';
 
 async function getPaths({limit, page, name, all}: any) {
     let filter: any = {status: {[Op.eq]: 'active'}};
@@ -10,6 +11,11 @@ async function getPaths({limit, page, name, all}: any) {
         const rows = await Path.findAll({
             where: filter,
             order: [['id', 'DESC']],
+            include: [
+                {
+                    model: Municipio,
+                }
+            ]
         });
         // const user = await User.findByPk(3);
         // rows[0].addUser(user as User);
@@ -22,6 +28,11 @@ async function getPaths({limit, page, name, all}: any) {
         // subQuery: false,
         where: filter,
         order: [['id', 'DESC']],
+        include: [
+            {
+                model: Municipio,
+            }
+        ]
     });
     // const user = await User.findByPk(3);
     // rows[0].addUser(user as User);

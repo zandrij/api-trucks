@@ -3,6 +3,7 @@ import { Optional } from "sequelize";
 export interface PathAttributes {
     id: number;
     name: string;
+    municipioId: number;
     status: 'active' | 'deleted';
     createAt?: Date;
     updateAt?: Date;

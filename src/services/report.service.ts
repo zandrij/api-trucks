@@ -18,33 +18,65 @@ async function getCustomerBuyTotal({limit, page, start, end}: any, type: string)
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
     const offset = page === 1 ? 0 : Math.floor((limit * page) - limit);
     const dates = !start || !end ? {} : {createdAt: {[Op.between]: [start, end]}}
+    
+    console.log(start, end)
+
     const count = await User.count({where: {
         type: {[Op.eq]: 'customer'},
-    }});
+        
+    },      include: [
+        {
+            model: Payment,
+            where: {status: {[Op.eq]: 'aproved'}, ...dates},
+            attributes: []
+        }
+    ],});
+    
+
+    // const rows = await User.findAll({
+    //     limit,
+    //     offset,
+    //     // subQuery: false,
+    //     order: [['total', 'DESC']],
+    //     where: {
+    //         type: {[Op.eq]: 'customer'},
+    //     },
+    //     attributes: [
+    //         ...columnsUser, 
+    //         [Sequelize.fn('COUNT', Sequelize.col('Payments.id')), "total"],
+    //         [Sequelize.fn('SUM', Sequelize.col('Payments.amount')), "totalAmount"]
+    //     ],
+    //     include: [
+    //         {
+    //             model: Payment,
+    //             // subQuery: false,
+    //             // where: {
+    //             //     // status: {[Op.eq]: 'aproved'}, 
+    //             //     ...dates},
+    //             // attributes: ['id']
+    //         }
+    //     ],
+    //     group: ['User.id']
+    // });
+
     const rows = await User.findAll({
-        limit,
-        offset,
-        subQuery: false,
-        order: [['total', 'DESC']],
-        where: {
-            type: {[Op.eq]: 'customer'},
-            ...dates
-        },
+        where: {type: {[Op.eq]: 'customer'}},
         attributes: [
-            ...columnsUser, 
+            ...columnsUser,
             [Sequelize.fn('COUNT', Sequelize.col('Payments.id')), "total"],
             [Sequelize.fn('SUM', Sequelize.col('Payments.amount')), "totalAmount"]
         ],
         include: [
             {
                 model: Payment,
-                // where: {status: {[Op.eq]: 'aproved'}},
+                where: dates,
                 attributes: []
             }
         ],
         group: ['User.id']
-    });
-    return {total: count, rows, limit, page};
+    })
+
+    return {total: 0, rows, limit, page};
 }
 
 // path con contador de recorridos o jornadas

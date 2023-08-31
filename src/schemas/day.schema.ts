@@ -124,7 +124,13 @@ const getDaysSchema = z.object({
         drive: z.string().optional(),
         customer: z.string().optional(),
         status: z.enum(['wait', 'charging', 'dispatching', 'end', 'null']).optional(),
-        path: z.string().optional()
+        sale: z.enum(['day', 'month']).optional(),
+        path: z.string().optional(),
+        trucks: z.string().refine((data) => {
+            return data === 'true' || data === 'false';
+          }, {
+            message: 'El valor debe ser "true" o "false"',
+          }).transform(data => data === 'true').default('false')
         // path: z.string().optional().transform((val) => {
         //     return (val === 'true')
         // })

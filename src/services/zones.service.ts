@@ -24,13 +24,13 @@ async function getZone(id:number) {
     return zone;
 }
 
-async function createZone(data:any, type: string) {
-    if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
-    const pat = await Path.create({name: data.name, status: 'active'});
-    const zonesResult = data.zones.map((e: ZonesAttributes) => ({...e, idpath: pat.id}))
-    const zones = await Zones.bulkCreate(zonesResult);
-    return {...pat.toJSON(), zones};
-}
+// async function createZone(data:any, type: string) {
+//     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
+//     const pat = await Path.create({name: data.name, status: 'active'});
+//     const zonesResult = data.zones.map((e: ZonesAttributes) => ({...e, idpath: pat.id}))
+//     const zones = await Zones.bulkCreate(zonesResult);
+//     return {...pat.toJSON(), zones};
+// }
 
 async function createOnlyZone(data:any, type: string) {
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
@@ -53,7 +53,7 @@ async function updateOneZone(id:number, data: any, type: string) {
 }
 
 export {
-    createZone,
+    // createZone,
     createOnlyZone,
     DeleteOneZone,
     updateOneZone,

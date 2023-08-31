@@ -6,6 +6,7 @@ import Payment from "../models/payment.model";
 import Truck from "../models/truck.model";
 import User from "../models/user";
 import Zones from "../models/zones.model";
+import dayjs from "dayjs";
 
 interface RouteDay {
     id: number;
@@ -15,16 +16,28 @@ interface RouteDay {
     status: boolean;
 }
 
-async function getDays({limit, page, status, drive, customer, path}: any, type: string) {
+async function getDays({limit, page, status, drive, customer, path, sale}: any, type: string) {
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
     const offset = page === 1 ? 0 : Math.floor((limit * page) - limit);
-    console.log(status)
+    let filter: any = {};
+    if(status) filter.status = {[Op.eq]: status}
+    if(sale) {
+        const dateFormat = 'YYYY-MM-DD';
+        const dateS = dayjs();
+        filter.createdAt = {[Op.between]: [
+            dateS.format(dateFormat) + ' 00:00:00', 
+            sale === 'day' ? dateS.add(1, 'day').format(dateFormat) + ' 00:00:00' :
+            dateS.add(1, 'month').format(dateFormat) + ' 00:00:00'
+        ]}
+        
+    }
+
     const {count, rows} = await Day.findAndCountAll({
         limit,
         offset,
         order: [['id', 'DESC']],
-        attributes: ['iddrive', 'status'],
-        where: status ? {status: {[Op.eq]: status}} : undefined,
+        attributes: ['iddrive', 'status', 'idpath', 'idtruck', 'iduser', 'lts', 'dateStart', 'dateEnd', 'createdAt'],
+        where: filter,
         include: [
             {
                 model: Path,
@@ -41,6 +54,9 @@ async function getDays({limit, page, status, drive, customer, path}: any, type: 
                 model: Truck,
                 attributes: ['color', 'model', 'serial', 'lts', 'status']
             },
+            // {
+            //     model: Payment,
+            // },
             {
                 model: User,
                 where: customer ? {name: {[Op.like]: `%${customer}%`}} : undefined,
