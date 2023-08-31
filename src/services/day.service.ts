@@ -24,7 +24,7 @@ async function getDays({limit, page, status, drive, customer, path}: any, type: 
         offset,
         order: [['id', 'DESC']],
         attributes: ['iddrive', 'status', 'id'],
-        where: status ? {status: {[Op.eq]: status}} : undefined,
+        where: status && {status: {[Op.eq]: status}},
         include: [
             {
                 model: Path,
