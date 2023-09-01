@@ -7,7 +7,7 @@ export interface PaymentAttributes {
     reference: string;
     image: string;
     amount: number;
-    type: 'cash' | 'transfer' | 'mobile'
+    type: 'cash' | 'transfer' | 'mobile' | 'binance' | 'zelle'
     /**
      * ?wait: la data se creo y esta en espera de un pago,
      * paid: el cliente subio un pago,

@@ -14,7 +14,7 @@ class Payment extends Model<PaymentAttributes, PaymentInput> implements PaymentA
     reference!: string;
     image!: string;
     amount!: number;
-    type!: "cash" | "transfer" | "mobile";
+    type!: "cash" | "transfer" | "mobile" | "binance" | "zelle";
     status!: "wait" | "paid" | "reject" | "aproved" | "cancel";
 
     public readonly createdAt!: Date;
@@ -51,7 +51,7 @@ Payment.init({
     },
     type: {
         type: DataTypes.ENUM,
-        values: ['mobile', 'cash', 'transfer'],
+        values: ['mobile', 'cash', 'transfer',  'binance' , 'zelle'],
         allowNull: true,
     },
     status: {
