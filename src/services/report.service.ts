@@ -5,6 +5,8 @@ import { columnsUser } from '../constants/columns';
 import Payment from '../models/payment.model';
 import Path from '../models/Path';
 import Day from '../models/day.model';
+import Truck from '../models/truck.model';
+import Municipio from '../models/municipio.model';
 
 /**
  *  obtiene el usuario com
@@ -100,10 +102,15 @@ async function getPathWithDays({limit, page, start, end}: any, type: string) {
         attributes: [
             'id',
             'name',
+            'municipioId',
             [Sequelize.fn('COUNT', Sequelize.col('Days.id')), "total"],
             // [Sequelize.fn('SUM', Sequelize.col('Payments.amount')), "totalAmount"]
         ],
         include: [
+            {
+                model: Municipio,
+                attributes: ['id', 'name']
+            },
             {
                 model: Day,
                 // subQuery: false,
@@ -155,8 +162,92 @@ async function getDriverDayEnd({limit, page, start, end}: any, type: string) {
     return {total: count, rows, limit, page};
 }
 
+
+// path con contador de recorridos o jornadas
+async function getTrucksReport({limit, page, start, end}: any, type: string) {
+    if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
+    const offset = page === 1 ? 0 : Math.floor((limit * page) - limit);
+    const dates = !start || !end ? {} : {createdAt: {[Op.between]: [start, end]}}
+    // const count = await Truck.count({where: {
+    //     type: {[Op.eq]: 'drive'}
+    // }, include: [
+    //     {
+    //         model: Day,
+    //         where: {status: {[Op.eq]: 'end'}, ...dates},
+    //         attributes: []
+    //     }
+    // ]});
+    const rows = await Truck.findAll({
+        limit,
+        offset,
+        subQuery: false,
+        order: [['total', 'DESC']],
+        // where: {
+        //     type: {[Op.eq]: 'drive'},
+        // },
+        attributes: [
+            'id', 'color', 'model', 'lts', 'serial', 'status', 'createdAt',
+            [Sequelize.fn('COUNT', Sequelize.col('Days.id')), "total"],
+            // [Sequelize.fn('SUM', Sequelize.col('Payments.amount')), "totalAmount"]
+        ],
+        include: [
+            {
+                model: Day,
+                where: {status: {[Op.eq]: 'end'},...dates},
+                attributes: []
+                
+            }
+        ],
+        group: ['Truck.id']
+    });
+    return {total: 0, rows, limit, page};
+}
+
+// path con contador de recorridos o jornadas
+// async function getMunicipiosReport({limit, page, start, end}: any, type: string) {
+//     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
+//     const offset = page === 1 ? 0 : Math.floor((limit * page) - limit);
+//     const dates = !start || !end ? {} : {createdAt: {[Op.between]: [start, end]}}
+//     // const count = await Truck.count({where: {
+//     //     type: {[Op.eq]: 'drive'}
+//     // }, include: [
+//     //     {
+//     //         model: Day,
+//     //         where: {status: {[Op.eq]: 'end'}, ...dates},
+//     //         attributes: []
+//     //     }
+//     // ]});
+//     const rows = await Truck.findAll({
+//         limit,
+//         offset,
+//         subQuery: false,
+//         order: [['total', 'DESC']],
+//         // where: {
+//         //     type: {[Op.eq]: 'drive'},
+//         // },
+//         attributes: [
+//             'id', 'color', 'model', 'lts', 'serial', 'status', 'createdAt',
+//             [Sequelize.fn('COUNT', Sequelize.col('Days.id')), "total"],
+//             // [Sequelize.fn('SUM', Sequelize.col('Payments.amount')), "totalAmount"]
+//         ],
+//         include: [
+//             {
+//                 model: Day,
+//                 where: {status: {[Op.eq]: 'end'},...dates},
+//                 attributes: []
+                
+//             }
+//         ],
+//         group: ['Truck.id']
+//     });
+//     return {total: 0, rows, limit, page};
+// }
+
+
+
 export {
     getCustomerBuyTotal,
     getPathWithDays,
-    getDriverDayEnd
+    getDriverDayEnd,
+    getTrucksReport
 }

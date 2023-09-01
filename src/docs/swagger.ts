@@ -130,7 +130,167 @@ const swaggerDefinition: OAS3Definition = {
                         type: "string"
                     }
                 }
-            }
+            },
+            municipio: {
+                type: "object",
+                required: ["name"],
+                properties: {
+                    name: {
+                        type: "string",
+                    }
+                }
+            },
+            path: {
+                type: "object",
+                required: ["name", "municipioId"],
+                properties: {
+                    name: {
+                        type: "string",
+                    },
+                    municipioId: {
+                        type: "number",
+                    },
+                    status: {
+                        type: "number",
+                        "enum": [ "active", "deleted"],
+                    }
+                }
+            },
+            truck: {
+                type: "object",
+                required: ["color", "model", "serial", "lts", "status"],
+                properties: {
+                    color: {
+                        type: "string",
+                    },
+                    model: {
+                        type: "string",
+                    },
+                    serial: {
+                        type: "string"
+                    },
+                    lts: {
+                        type: "number"
+                    },
+                    status: {
+                        type: "string",
+                        "enum": [ "avaible", "disabled", "working", "deleted"],
+                    }
+                }
+            },
+            dayStatus: {
+                type: "object",
+                required: ["status"],
+                properties: {
+                    status: {
+                        type: "string",
+                        "enum": [ "wait", "charging", "dispatching", "end"],
+                    }
+                }
+            },
+            dayEnd: {
+                type: "object",
+                required: ["status"],
+                properties: {
+                    dateEnd: {
+                        type: "string",
+                    }
+                }
+            },
+            day: {
+                type: "object",
+                required: ["iddrive", "idtruck", "idpath", "iduser", "lts", "dateStart"],
+                properties: {
+                    iddrive: {
+                        type: "number",
+                    },
+                    idtruck: {
+                        type: "number",
+                    },
+                    idpath: {
+                        type: "number"
+                    },
+                    iduser: {
+                        type: "number"
+                    },
+                    lts: {
+                        type: "string"
+                    },
+                    dateStart: {
+                        type: "string"
+                    }
+                }
+            },
+            payment: {
+                type: "object",
+                required: ["type", "reference", "file", "amount"],
+                properties: {
+                    reference: {
+                        type: "number"
+                    },
+                    file: {
+                        type: "number"
+                    },
+                    amount: {
+                        type: "number"
+                    },
+                    type: {
+                        type: "string",
+                        "enum": [ "cash", "transfer", "mobile"],
+                    }
+                }
+            },
+            paymentStatus: {
+                type: "object",
+                required: ["status"],
+                properties: {
+                    status: {
+                        type: "string",
+                        "enum": [ "wait", "paid", "reject", "aproved", "cancel"],
+                    }
+                }
+            },
+            // reportClients: {
+            //     type: "object",
+            //     properties: {
+            //         id: {
+            //             type: "number"
+            //         },
+            //         name: {
+            //             type: "string"
+            //         },
+            //         lastName: {
+            //             type: "string"
+            //         },
+            //         email: {
+            //             type: "string"
+            //         },
+            //         dni: {
+            //             type: "string"
+            //         },
+            //         phone: {
+            //             type: "string"
+            //         },
+            //         device: {
+            //             type: "string"
+            //         },
+            //         address: {
+            //             type: "string"
+            //         },
+            //         type: {
+            //             type: "string"
+            //         },
+            //         status: {
+            //             type: "string"
+            //         },
+            //         total: {
+            //             type: "number"
+            //         },
+            //         totalAmount: {
+            //             type: "number"
+            //         }
+            //     }
+            // },
         }
     },
 }

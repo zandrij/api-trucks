@@ -1,9 +1,22 @@
-import { Request, Response, Router } from "express";
+import { Router } from "express";
 import AuthRouter from "./auth";
-
+import MunicipioRouter from "./municipio";
+import PathRouter from "./path";
+import TruckRouter from "./truck";
+import UserRouter from "./user";
+import DayRouter from "./day";
+import PaymentRouter from "./payment";
+import ReportRouter from "./report";
 
 const router = Router();
 router.use('/auth', AuthRouter)
+router.use('/municipio', MunicipioRouter)
+router.use('/path', PathRouter)
+router.use('/truck', TruckRouter)
+router.use('/user', UserRouter)
+router.use('/day', DayRouter)
+router.use('/payment', PaymentRouter)
+router.use('/report', ReportRouter)
 
 // const PATH_ROUTER = `${__dirname}`
 // const router = Router();

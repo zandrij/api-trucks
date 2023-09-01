@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createOneMunicipio, getMunicipios, updateMunicipio } from "../services/municipios.service";
+import { createOneMunicipio, destroyMunicipio, getMunicipios, getOneMunicipio, updateMunicipio } from "../services/municipios.service";
 import { handleHttp } from "../utils/error.handle";
 import { RequestUser } from "../interfaces/users";
 
@@ -42,8 +42,36 @@ async function updateMunicipioCtrl({params, user, body}:RequestUser, res: Respon
     }
 }
 
+async function destroyMunicipioCtrl({params, user}:RequestUser, res: Response) {
+    try {
+        const response = await destroyMunicipio(params.id as unknown as number, `${user?.type}`);
+        return res.status(200).json({
+            data: response,
+            ok: true,
+            message: "Eliminado exitosamente"
+        });
+    } catch (error) {
+        handleHttp(res, "INTERNAL_SERVER_ERROR", error);
+    }
+}
+
+async function getOneMunicipioCtrl({params}: Request, res: Response) {
+    try {
+        const response = await getOneMunicipio(params.id as unknown as number);
+        return res.status(200).json({
+            data: response,
+            ok: true,
+        });
+    } catch (error) {
+        handleHttp(res, "INTERNAL_SERVER_ERROR", error);
+    }
+}
+
+
 export {
     getMunicipioCtrl,
     createOneMunicipioCtrl,
-    updateMunicipioCtrl
+    updateMunicipioCtrl,
+    destroyMunicipioCtrl,
+    getOneMunicipioCtrl
 }

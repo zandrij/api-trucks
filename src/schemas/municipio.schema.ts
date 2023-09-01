@@ -27,8 +27,25 @@ const createMunicipioSchema = z.object({
     })
 });
 
+const IdMunicipioSchema = z.object({
+    params: z.object({
+        id: z.string().nonempty().transform((val, ctx) => {
+            const result = parseInt(val);
+            if (isNaN(result)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "id no es un numero"
+                });
+                return z.NEVER;
+            }
+            return result;
+        }),
+    })
+});
+
 export {
     updateMunicipioSchema,
-    createMunicipioSchema
+    createMunicipioSchema,
+    IdMunicipioSchema
     
 }

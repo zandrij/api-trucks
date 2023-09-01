@@ -1,4 +1,5 @@
 import { GlobalError } from "../constants/global_errors";
+import Path from "../models/Path";
 import Municipio from "../models/municipio.model";
 
 async function getMunicipios() {
@@ -25,17 +26,27 @@ async function updateMunicipio(id:number, data: any, type: string) {
     return municipio.toJSON();
 }
 
-// async function logicDeletePath(id:number, type: string) {
-//     if(type !== 'owner') throw GlobalError.NOT_PERMITED_ACCESS;
-//     const path = await Path.findByPk(id);
-//     if(!path) throw GlobalError.NOT_FOUND_DATA;
-//     path.update({status: 'deleted'})
-//     // day.update({status});
-//     return path.toJSON();
-// }
+async function getOneMunicipio(id:number) {
+    const municipio = await Municipio.findByPk(id);
+    if(!municipio) throw GlobalError.NOT_FOUND_DATA;
+    return municipio.toJSON();
+}
+
+async function destroyMunicipio(id:number, type: string) {
+    if(type !== 'owner') throw GlobalError.NOT_PERMITED_ACCESS;
+    const municipio = await Municipio.findByPk(id);
+    if(!municipio) throw GlobalError.NOT_FOUND_DATA;
+    const path = await Path.findOne({where: {municipioId: municipio.id}});
+    if(path) throw GlobalError.DATA_IN_USE;
+    municipio.destroy()
+    // day.update({status});
+    return null;
+}
 
 export {
     getMunicipios,
     createOneMunicipio,
-    updateMunicipio
+    updateMunicipio,
+    getOneMunicipio,
+    destroyMunicipio
 }

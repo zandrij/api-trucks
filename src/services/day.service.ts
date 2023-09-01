@@ -26,8 +26,8 @@ async function getDays({limit, page, status, drive, customer, path, sale}: any, 
         const dateS = dayjs();
         filter.createdAt = {[Op.between]: [
             dateS.format(dateFormat) + ' 00:00:00', 
-            sale === 'day' ? dateS.add(1, 'day').format(dateFormat) + ' 00:00:00' :
-            dateS.add(1, 'month').format(dateFormat) + ' 00:00:00'
+            sale === 'day' ? dateS.subtract(1, 'day').format(dateFormat) + ' 00:00:00' :
+            dateS.subtract(1, 'month').format(dateFormat) + ' 00:00:00'
         ]}
         
     }
@@ -36,7 +36,7 @@ async function getDays({limit, page, status, drive, customer, path, sale}: any, 
         limit,
         offset,
         order: [['id', 'DESC']],
-        attributes: ['iddrive', 'status', 'idpath', 'idtruck', 'iduser', 'lts', 'dateStart', 'dateEnd', 'createdAt'],
+        attributes: ['id', 'iddrive', 'status', 'idpath', 'idtruck', 'iduser', 'lts', 'dateStart', 'dateEnd', 'createdAt'],
         where: filter,
         include: [
             {
@@ -48,11 +48,11 @@ async function getDays({limit, page, status, drive, customer, path, sale}: any, 
                 model: User,
                 // as: 'driver',
                 where: drive ? {name: {[Op.like]: `%${drive}%`}} : undefined,
-                attributes: ['name', 'lastName', 'email', 'dni']
+                attributes: ['name', 'lastName', 'email', 'dni', 'id']
             },
             {
                 model: Truck,
-                attributes: ['color', 'model', 'serial', 'lts', 'status']
+                attributes: ['id', 'color', 'model', 'serial', 'lts', 'status']
             },
             // {
             //     model: Payment,
@@ -61,7 +61,7 @@ async function getDays({limit, page, status, drive, customer, path, sale}: any, 
                 model: User,
                 where: customer ? {name: {[Op.like]: `%${customer}%`}} : undefined,
                 as: 'client',
-                attributes: ['name', 'lastName', 'email', 'dni', 'device', 'phone']
+                attributes: ['id', 'name', 'lastName', 'email', 'dni', 'device', 'phone']
             },
         ]
     });

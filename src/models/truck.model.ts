@@ -49,6 +49,7 @@ Truck.init({
     // paranoid: true
 });
 
+
 // Day.belongsTo(Path, {foreignKey: 'idpath'})
 // Day.belongsTo(User, {foreignKey: 'iddrive'})
 
