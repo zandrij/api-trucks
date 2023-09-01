@@ -5,7 +5,7 @@ const updateUserSchema = z.object({
         name: z.string().trim().optional(),
         lastName: z.string().trim().optional(),
         email: z.string().trim().email({message: "Email es inválido"}).optional(),
-        dni: z.string().min(8).trim().optional(),
+        dni: z.string().min(7, {message: 'Mínimo 7 dígitos'}).trim().optional(),
         phone: z.string().min(8).trim().optional(),
         device: z.string().trim().optional(),
         address: z.string().trim().optional(),

@@ -33,7 +33,7 @@ const registerDriveSchema = z.object({
         name: z.string().trim().nonempty(),
         email: z.string().trim().email({message: "Email es inválido"}).nonempty(),
         password: z.string().trim().min(6, {message: "Contraseña es muy corta"}),
-        dni: z.string().min(8).trim().nonempty(),
+        dni: z.string().min(7, {message: 'Mínimo 7 dígitos'}).trim().nonempty(),
         phone: z.string().trim().optional(),
         device: z.string().trim().optional(),
         address: z.string().trim().optional(),
@@ -56,7 +56,7 @@ const registerCustomerSchema = z.object({
         lastName: z.string().trim().optional(),
         email: z.string().trim().email({message: "Email es inválido"}).nonempty(),
         // password: z.string().trim().min(6, {message: "Contraseña es muy corta"}),
-        dni: z.string().min(8).trim().nonempty(),
+        dni: z.string().min(7, {message: 'Mínimo 7 dígitos'}).trim().nonempty(),
         phone: z.string().trim().optional(),
         address: z.string().trim().optional(),
     //     confirmPass: z.string().nonempty().min(6)
