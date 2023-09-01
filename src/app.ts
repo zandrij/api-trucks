@@ -1,5 +1,7 @@
 import "dotenv/config"
 import express from "express";
+import swaggerUI from "swagger-ui-express";
+import swaggerSetup from './docs/swagger';
 
 import cors from 'cors'
 import { sequelize } from "./config/db";
@@ -12,7 +14,7 @@ app.use(cors());
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 app.use('/public', express.static(`${process.cwd()}/public`))
-
+app.use("/doc", swaggerUI.serve, swaggerUI.setup(swaggerSetup))
 sequelize.sync({force: false})
 .then(() => console.log("connected to db"))
 .catch((e) => console.log('db', e))

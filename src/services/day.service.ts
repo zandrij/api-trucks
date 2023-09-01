@@ -6,6 +6,7 @@ import Payment from "../models/payment.model";
 import Truck from "../models/truck.model";
 import User from "../models/user";
 import Zones from "../models/zones.model";
+import dayjs from "dayjs";
 
 interface RouteDay {
     id: number;
@@ -15,16 +16,28 @@ interface RouteDay {
     status: boolean;
 }
 
-async function getDays({limit, page, status, drive, customer, path}: any, type: string) {
+async function getDays({limit, page, status, drive, customer, path, sale}: any, type: string) {
     if(type !== 'owner') return GlobalError.NOT_PERMITED_ACCESS;
     const offset = page === 1 ? 0 : Math.floor((limit * page) - limit);
-    console.log(status)
+    let filter: any = {};
+    if(status) filter.status = {[Op.eq]: status}
+    if(sale) {
+        const dateFormat = 'YYYY-MM-DD';
+        const dateS = dayjs();
+        filter.createdAt = {[Op.between]: [
+            dateS.format(dateFormat) + ' 00:00:00', 
+            sale === 'day' ? dateS.subtract(1, 'day').format(dateFormat) + ' 00:00:00' :
+            dateS.subtract(1, 'month').format(dateFormat) + ' 00:00:00'
+        ]}
+        
+    }
+
     const {count, rows} = await Day.findAndCountAll({
         limit,
         offset,
         order: [['id', 'DESC']],
-        attributes: ['iddrive', 'status', 'id'],
-        where: status && {status: {[Op.eq]: status}},
+        attributes: ['id', 'iddrive', 'status', 'idpath', 'idtruck', 'iduser', 'lts', 'dateStart', 'dateEnd', 'createdAt'],
+        where: filter,
         include: [
             {
                 model: Path,
@@ -35,17 +48,20 @@ async function getDays({limit, page, status, drive, customer, path}: any, type: 
                 model: User,
                 // as: 'driver',
                 where: drive ? {name: {[Op.like]: `%${drive}%`}} : undefined,
-                attributes: ['name', 'lastName', 'email', 'dni']
+                attributes: ['name', 'lastName', 'email', 'dni', 'id']
             },
             {
                 model: Truck,
-                attributes: ['color', 'model', 'serial', 'lts', 'status']
+                attributes: ['id', 'color', 'model', 'serial', 'lts', 'status']
             },
+            // {
+            //     model: Payment,
+            // },
             {
                 model: User,
                 where: customer ? {name: {[Op.like]: `%${customer}%`}} : undefined,
                 as: 'client',
-                attributes: ['name', 'lastName', 'email', 'dni', 'device', 'phone']
+                attributes: ['id', 'name', 'lastName', 'email', 'dni', 'device', 'phone']
             },
         ]
     });

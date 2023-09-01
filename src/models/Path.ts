@@ -1,11 +1,13 @@
 import { sequelize } from "../config/db";
 import {DataTypes, Model} from 'sequelize'
 import { PathAttributes, PathInput } from "../interfaces/path.interface";
+import Municipio from "./municipio.model";
 
 
 class Path extends Model<PathAttributes, PathInput> implements PathAttributes {
     id!: number;
     name!: string;
+    municipioId!: number;
     status!: "active" | "deleted";
 
     public readonly createdAt!: Date;
@@ -37,6 +39,10 @@ Path.init({
     name: {
         type: DataTypes.STRING
     },
+    municipioId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
     status: {
         type: DataTypes.ENUM,
         values: ['active', 'deleted']
@@ -47,6 +53,10 @@ Path.init({
     sequelize: sequelize,
     // paranoid: true
 });
+
+// Municipio.belongsTo(Path, {foreignKey: 'municipioId'})
+Path.belongsTo(Municipio, {foreignKey: 'municipioId'})
+
 // Path.belongsToMany(User, {through: "PathAndUser"})
 // Path.hasMany(Zones, {foreignKey: 'idpath'});
 // Zones.belongsTo(Path, {foreignKey: 'idpath'});
