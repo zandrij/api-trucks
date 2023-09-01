@@ -4,7 +4,7 @@ import Municipio from "../models/municipio.model";
 
 async function getMunicipios() {
     const rows = await Municipio.findAll({
-        order: [['id', 'DESC']],
+        order: [['id', 'asc']],
     });
     return rows;
 }
