@@ -9,6 +9,7 @@ const createDaySchema = z.object({
         lts: z.number().min(1),
         dateStart: z.string(),
         dateEnd: z.string().optional(),
+        createdAt: z.string().optional(),
     })
 });
 
@@ -128,7 +129,8 @@ const getDaysSchema = z.object({
         path: z.string().optional(),
         trucks: z.string().refine((data) => {
             return data === 'true' || data === 'false';
-          }, {
+          },
+          {
             message: 'El valor debe ser "true" o "false"',
           }).transform(data => data === 'true').default('false')
         // path: z.string().optional().transform((val) => {
