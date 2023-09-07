@@ -5,7 +5,6 @@ import Day from "../models/day.model";
 import Payment from "../models/payment.model";
 import Truck from "../models/truck.model";
 import User from "../models/user";
-import Zones from "../models/zones.model";
 import dayjs from "dayjs";
 
 interface RouteDay {
