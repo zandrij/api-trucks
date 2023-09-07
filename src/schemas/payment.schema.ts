@@ -103,7 +103,7 @@ const updatePaymentStatuschema = z.object({
 const updatePaymentRefSchema = z.object({
     body: z.object({
         reference: z.string().trim().nonempty(),
-        type: z.enum(['cash', 'transfer', 'mobile']),
+        type: z.enum(['cash', 'transfer', 'mobile', 'zelle', 'binance']),
         // status: z.enum(['wait', 'paid', 'reject', 'aproved', 'cancel']),
         amount: z.string().trim().nonempty().transform((val, ctx) => {
             const result = parseFloat(val);

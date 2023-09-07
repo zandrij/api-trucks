@@ -19,7 +19,7 @@ export interface UserAttributes {
 
 }
 
-export interface UserInput extends Optional<UserAttributes, 'id' | 'lastName' | 'dni' | 'status'> {}
+export interface UserInput extends Optional<UserAttributes, 'id' | 'lastName' | 'dni' > {}
 export interface UserOuput extends Required<UserAttributes> {}
 
 export interface RequestUser extends Request {
